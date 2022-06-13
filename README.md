@@ -429,7 +429,7 @@ Calculate the contrast between two colors (between *1* and *21*).
 - `$color2` is a *Color* object.
 
 ```php
-$contrast = $color->contrast($color1, $color2);
+$contrast = Color::contrast($color1, $color2);
 ```
 
 **Distance**
@@ -440,7 +440,7 @@ Calculate the distance between two colors.
 - `$color2` is a *Color* object.
 
 ```php
-$distance = $color->dist($color1, $color2);
+$distance = Color::dist($color1, $color2);
 ```
 
 **Find Contrast**
@@ -453,7 +453,7 @@ Find an optimally contrasting color for another color.
 - `$stepSize` is a number between *0* and *1* indicating the amount to darken/lighten the color on each iteration, and will default to *0.01*.
 
 ```php
-$contrastColor = $color->findContrast($color1, $color2, $minContrast, $stepSize);
+$contrastColor = Color::findContrast($color1, $color2, $minContrast, $stepSize);
 ```
 
 If `color2` value is *null*, a clone of `color1` will be used instead.
@@ -469,7 +469,7 @@ Create a new *Color* by mixing two colors together by a specified amount.
 - `$amount` is a number between *0* and *1*.
 
 ```php
-$mixed = $color->mix($color1, $color2, $amount);
+$mixed = Color::mix($color1, $color2, $amount);
 ```
 
 **Multiply**
@@ -481,5 +481,5 @@ Create a new *Color* by multiplying two colors together by a specified amount.
 - `$amount` is a number between *0* and *1*.
 
 ```php
-$multiplied = $color->multiply($color1, $color2, $amount);
+$multiplied = Color::multiply($color1, $color2, $amount);
 ```
