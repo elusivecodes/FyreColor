@@ -3,19 +3,17 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
-use
-    RuntimeException;
+use RuntimeException;
 
-use function
-    array_key_exists,
-    array_map,
-    array_slice,
-    hexdec,
-    preg_match,
-    strlen,
-    strtolower,
-    substr,
-    trim;
+use function array_key_exists;
+use function array_map;
+use function array_slice;
+use function hexdec;
+use function preg_match;
+use function strlen;
+use function strtolower;
+use function substr;
+use function trim;
 
 /**
  * CreateTrait
@@ -34,6 +32,7 @@ trait CreateTrait
     public static function fromCMY(int|float $c, int|float $m, int|float $y, int|float $a = 1): static
     {
         [$r, $g, $b] = static::CMY2RGB($c, $m, $y);
+
         return new static($r, $g, $b, $a);
     }
 

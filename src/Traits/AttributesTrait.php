@@ -57,50 +57,50 @@ trait AttributesTrait
     /**
      * Set the alpha value of the color.
      * @param int|float $a The alpha value. (0, 1)
-     * @return Color The modified Color object.
+     * @return Color A new Color object.
      */
     public function setAlpha(int|float $a): static
     {
-        return $this->setColor($this->r, $this->g, $this->b, $a);
+        return new static($this->r, $this->g, $this->b, $a);
     }
 
     /**
      * Set the brightness value of the color.
      * @param int|float $v The brightness value. (0, 100)
-     * @return Color The modified Color object.
+     * @return Color A new Color object.
      */
     public function setBrightness(int|float $v): static
     {
         [$h, $s, $_] = $this->getHSV();
         [$r, $g, $b] = static::HSV2RGB($h, $s, $v);
 
-        return $this->setColor($r, $g, $b, $this->a);
+        return new static($r, $g, $b, $this->a);
     }
 
     /**
      * Set the hue value of the color.
      * @param int|float $h The hue value. (0, 360)
-     * @return Color The modified Color object.
+     * @return Color A new Color object.
      */
     public function setHue(int|float $h): static
     {
         [$_, $s, $v] = $this->getHSV();
         [$r, $g, $b] = static::HSV2RGB($h, $s, $v);
 
-        return $this->setColor($r, $g, $b, $this->a);
+        return new static($r, $g, $b, $this->a);
     }
 
     /**
      * Set the saturation value of the color.
      * @param int|float $s The saturation value. (0, 100)
-     * @return Color The modified Color object.
+     * @return Color A new Color object.
      */
     public function setSaturation(int|float $s): static
     {
         [$h, $_, $v] = $this->getHSV();
         [$r, $g, $b] = static::HSV2RGB($h, $s, $v);
 
-        return $this->setColor($r, $g, $b, $this->a);
+        return new static($r, $g, $b, $this->a);
     }
 
 }

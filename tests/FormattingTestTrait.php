@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Color;
+namespace Tests;
 
-use
-    Fyre\Color\Color;
+use Fyre\Color\Color;
 
-trait FormattingTest
+trait FormattingTestTrait
 {
 
     public function testToHexShort(): void

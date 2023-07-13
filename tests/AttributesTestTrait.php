@@ -1,19 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\ColorImmutable;
+namespace Tests;
 
-use
-    Fyre\Color\ColorImmutable;
+use Fyre\Color\Color;
 
-trait AttributesTest
+trait AttributesTestTrait
 {
 
     public function testGetAlpha(): void
     {
         $this->assertSame(
             .75,
-            ColorImmutable::fromRGB(0, 0, 0, .75)->getAlpha()
+            Color::fromRGB(0, 0, 0, .75)->getAlpha()
         );
     }
 
@@ -21,7 +20,7 @@ trait AttributesTest
     {
         $this->assertSame(
             75.0,
-            ColorImmutable::fromHSV(180, 50, 75)->getBrightness()
+            Color::fromHSV(180, 50, 75)->getBrightness()
         );
     }
 
@@ -29,7 +28,7 @@ trait AttributesTest
     {
         $this->assertSame(
             270.0,
-            ColorImmutable::fromHSV(270, 50, 50)->getHue()
+            Color::fromHSV(270, 50, 50)->getHue()
         );
     }
 
@@ -37,7 +36,7 @@ trait AttributesTest
     {
         $this->assertSame(
             25.0,
-            ColorImmutable::fromHSV(180, 25, 50)->getSaturation()
+            Color::fromHSV(180, 25, 50)->getSaturation()
         );
     }
 
@@ -45,13 +44,13 @@ trait AttributesTest
     {
         $this->assertSame(
             .17935225036098287,
-            ColorImmutable::fromHSV(180, 50, 50)->luma()
+            Color::fromHSV(180, 50, 50)->luma()
         );
     }
 
     public function testSetAlpha(): void
     {
-        $color1 = ColorImmutable::fromHSV(120, 50, 50);
+        $color1 = Color::fromHSV(120, 50, 50);
         $color2 = $color1->setAlpha(.75);
 
         $this->assertSame(
@@ -67,7 +66,7 @@ trait AttributesTest
 
     public function testSetBrightness(): void
     {
-        $color1 = ColorImmutable::fromHSV(120, 50, 50);
+        $color1 = Color::fromHSV(120, 50, 50);
         $color2 = $color1->setBrightness(75);
 
         $this->assertSame(
@@ -83,7 +82,7 @@ trait AttributesTest
 
     public function testSetHue(): void
     {
-        $color1 = ColorImmutable::fromHSV(120, 50, 50);
+        $color1 = Color::fromHSV(120, 50, 50);
         $color2 = $color1->setHue(270);
 
         $this->assertSame(
@@ -99,7 +98,7 @@ trait AttributesTest
 
     public function testSetSaturation(): void
     {
-        $color1 = ColorImmutable::fromHSV(120, 50, 50);
+        $color1 = Color::fromHSV(120, 50, 50);
         $color2 = $color1->setSaturation(25);
 
         $this->assertSame(

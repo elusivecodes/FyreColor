@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
-use
-    Fyre\Color\Color;
+use Fyre\Color\Color;
 
-use function
-    array_fill,
-    array_keys,
-    array_map;
+use function array_fill;
+use function array_keys;
+use function array_map;
 
 /**
  * PaletteTrait
@@ -41,7 +39,7 @@ trait PaletteTrait
     public function shades(int $shades = 10): array
     {
         return array_map(
-            fn(int $value): Color => $this->clone()->shade($value / ($shades + 1)),
+            fn(int $value): Color => $this->shade($value / ($shades + 1)),
             array_keys(array_fill(0, $shades, 0))
         );
     }
@@ -54,7 +52,7 @@ trait PaletteTrait
     public function tints(int $tints = 10): array
     {
         return array_map(
-            fn(int $value): Color => $this->clone()->tint($value / ($tints + 1)),
+            fn(int $value): Color => $this->tint($value / ($tints + 1)),
             array_keys(array_fill(0, $tints, 0))
         );
     }
@@ -67,7 +65,7 @@ trait PaletteTrait
     public function tones(int $tones = 10): array
     {
         return array_map(
-            fn(int $value): Color => $this->clone()->tone($value / ($tones + 1)),
+            fn(int $value): Color => $this->tone($value / ($tones + 1)),
             array_keys(array_fill(0, $tones, 0))
         );
     }

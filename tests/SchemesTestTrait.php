@@ -1,15 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Color;
+namespace Tests;
 
-use
-    Fyre\Color\Color;
+use Fyre\Color\Color;
 
-use function
-    array_map;
+use function array_map;
 
-trait SchemesTest
+trait SchemesTestTrait
 {
 
     public function testAnalogous(): void

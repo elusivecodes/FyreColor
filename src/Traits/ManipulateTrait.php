@@ -20,7 +20,7 @@ trait ManipulateTrait
         $l -= $l * $amount;
         [$r, $g, $b] = static::HSL2RGB($h, $s, $l);
 
-        return $this->setColor($r, $g, $b, $this->a);
+        return new static($r, $g, $b, $this->a);
     }
 
     /**
@@ -29,7 +29,7 @@ trait ManipulateTrait
      */
     public function invert(): static
     {
-        return $this->setColor(
+        return new static(
             255 - $this->r,
             255 - $this->g,
             255 - $this->b,
@@ -48,7 +48,7 @@ trait ManipulateTrait
         $l += (100 - $l) * $amount;
         [$r, $g, $b] = static::HSL2RGB($h, $s, $l);
 
-        return $this->setColor($r, $g, $b, $this->a);
+        return new static($r, $g, $b, $this->a);
     }
 
     /**
@@ -60,7 +60,7 @@ trait ManipulateTrait
     {
         $color = static::mix($this, new static(0), $amount);
 
-        return $this->setColor(
+        return new static(
             $color->r,
             $color->g,
             $color->b,
@@ -77,7 +77,7 @@ trait ManipulateTrait
     {
         $color = static::mix($this, new static(100), $amount);
 
-        return $this->setColor(
+        return new static(
             $color->r,
             $color->g,
             $color->b,
@@ -94,7 +94,7 @@ trait ManipulateTrait
     {
         $color = static::mix($this, new static(50), $amount);
 
-        return $this->setColor(
+        return new static(
             $color->r,
             $color->g,
             $color->b,

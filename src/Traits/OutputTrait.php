@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
-use const
-    PHP_INT_MAX;
+use const PHP_INT_MAX;
 
-use function
-    array_search,
-    round;
+use function array_search;
+use function round;
 
 /**
  * OutputTrait

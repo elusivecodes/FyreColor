@@ -3,16 +3,14 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
-use
-    Fyre\Color\ColorInterface;
+use Fyre\Color\Color;
 
-use function
-    array_reduce,
-    hypot,
-    max,
-    min,
-    round,
-    strlen;
+use function array_reduce;
+use function hypot;
+use function max;
+use function min;
+use function round;
+use function strlen;
 
 /**
  * StaticTrait
@@ -22,11 +20,11 @@ trait StaticTrait
 
     /**
      * Get the contrast value between two colors.
-     * @param ColorInterface $color1 The first Color.
-     * @param ColorInterface $color2 The second Color.
+     * @param Color $color1 The first Color.
+     * @param Color $color2 The second Color.
      * @return float The contrast value. (1, 21)
      */
-    public static function contrast(ColorInterface $color1, ColorInterface $color2): float
+    public static function contrast(Color $color1, Color $color2): float
     {
         $luma1 = $color1->luma();
         $luma2 = $color2->luma();
@@ -36,11 +34,11 @@ trait StaticTrait
 
     /**
      * Calculate the distance between two colors.
-     * @param ColorInterface $color1 The first Color.
-     * @param ColorInterface $color2 The second Color.
+     * @param Color $color1 The first Color.
+     * @param Color $color2 The second Color.
      * @return float The distance between the colors.
      */
-    public static function dist(ColorInterface $color1, ColorInterface $color2): float
+    public static function dist(Color $color1, Color $color2): float
     {
         return array_reduce([
             $color1->r - $color2->r,
@@ -51,17 +49,15 @@ trait StaticTrait
 
     /**
      * Find an optimally contrasting color for another color.
-     * @param ColorInterface $color1 The first Color.
-     * @param ColorInterface|null $color2 The second Color.
+     * @param Color $color1 The first Color.
+     * @param Color|null $color2 The second Color.
      * @param int|float $minContrast The minimum contrast.
      * @param int|float $stepSize The step size.
-     * @return ColorInterface|null The new Color.
+     * @return Color|null The new Color.
      */
-    public static function findContrast(ColorInterface $color1, ColorInterface|null $color2 = null, int|float $minContrast = 4.5, int|float $stepSize = .01): ColorInterface|null
+    public static function findContrast(Color $color1, Color|null $color2 = null, int|float $minContrast = 4.5, int|float $stepSize = .01): Color|null
     {
-        if (!$color2) {
-            $color2 = $color1->clone();
-        }
+        $color2 ??= $color1;
 
         if (static::contrast($color1, $color2) >= $minContrast) {
             return $color2;
@@ -70,7 +66,7 @@ trait StaticTrait
         $methods = ['tint', 'shade'];
         for ($i = $stepSize; $i <= 1; $i += $stepSize) {
             foreach ($methods AS $method) {
-                $tempColor = $color2->clone()->$method($i);
+                $tempColor = $color2->$method($i);
                 if (static::contrast($color1, $tempColor) >= $minContrast) {
                     return $tempColor;
                 }
@@ -82,12 +78,12 @@ trait StaticTrait
 
     /**
      * Create a new Color by mixing two colors together by a specified amount.
-     * @param ColorInterface $color1 The first Color.
-     * @param ColorInterface $color2 The second Color.
+     * @param Color $color1 The first Color.
+     * @param Color $color2 The second Color.
      * @param int|float $amount The amount to mix them by. (0, 1)
      * @return Color A new Color object.
      */
-    public static function mix(ColorInterface $color1, ColorInterface $color2, int|float $amount): static
+    public static function mix(Color $color1, Color $color2, int|float $amount): static
     {
         return new static(
             static::lerp($color1->r, $color2->r, $amount),
@@ -99,12 +95,12 @@ trait StaticTrait
 
     /**
      * Create a new Color by multiplying two colors together by a specified amount.
-     * @param ColorInterface $color1 The first Color.
-     * @param ColorInterface $color2 The second Color.
+     * @param Color $color1 The first Color.
+     * @param Color $color2 The second Color.
      * @param int|float $amount The amount to multiply them by. (0, 1)
      * @return Color A new Color object.
      */
-    public static function multiply(ColorInterface $color1, ColorInterface $color2, int|float $amount): static
+    public static function multiply(Color $color1, Color $color2, int|float $amount): static
     {
         return new static(
             static::lerp(

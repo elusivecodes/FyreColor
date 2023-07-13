@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
-use function
-    floor,
-    fmod,
-    max,
-    min,
-    round;
+use function floor;
+use function fmod;
+use function max;
+use function min;
+use function round;
 
 /**
  * ConversionTrait

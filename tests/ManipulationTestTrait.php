@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Color;
+namespace Tests;
 
-use
-    Fyre\Color\Color;
+use Fyre\Color\Color;
 
-trait ManipulationTest
+trait ManipulationTestTrait
 {
 
     public function testDarken(): void
@@ -15,13 +14,13 @@ trait ManipulationTest
         $color2 = $color1->darken(.5);
 
         $this->assertSame(
-            '#204020',
-            $color1->toString(),
+            '#408040',
+            $color1->toString()
         );
 
         $this->assertSame(
-            $color1,
-            $color2
+            '#204020',
+            $color2->toString(),
         );
     }
 
@@ -31,13 +30,13 @@ trait ManipulationTest
         $color2 = $color1->invert();
 
         $this->assertSame(
-            '#bf80bf',
-            $color1->toString(),
+            '#408040',
+            $color1->toString()
         );
 
         $this->assertSame(
-            $color1,
-            $color2
+            '#bf80bf',
+            $color2->toString(),
         );
     }
 
@@ -47,13 +46,13 @@ trait ManipulationTest
         $color2 = $color1->lighten(.5);
 
         $this->assertSame(
-            '#95ca95',
+            '#408040',
             $color1->toString()
         );
 
         $this->assertSame(
-            $color1,
-            $color2
+            '#95ca95',
+            $color2->toString(),
         );
     }
 
@@ -63,13 +62,13 @@ trait ManipulationTest
         $color2 = $color1->shade(.3);
 
         $this->assertSame(
-            '#2d592d',
-            $color1->toString(),
+            '#408040',
+            $color1->toString()
         );
 
         $this->assertSame(
-            $color1,
-            $color2
+            '#2d592d',
+            $color2->toString(),
         );
     }
 
@@ -79,13 +78,13 @@ trait ManipulationTest
         $color2 = $color1->tint(.3);
 
         $this->assertSame(
-            '#79a679',
-            $color1->toString(),
+            '#408040',
+            $color1->toString()
         );
 
         $this->assertSame(
-            $color1,
-            $color2
+            '#79a679',
+            $color2->toString(),
         );
     }
 
@@ -95,13 +94,13 @@ trait ManipulationTest
         $color2 = $color1->tone(.3);
 
         $this->assertSame(
-            '#538053',
-            $color1->toString(),
+            '#408040',
+            $color1->toString()
         );
 
         $this->assertSame(
-            $color1,
-            $color2
+            '#538053',
+            $color2->toString(),
         );
     }
 

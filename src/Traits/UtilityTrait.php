@@ -3,24 +3,14 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
-use function
-    round,
-    sprintf;
+use function round;
+use function sprintf;
 
 /**
  * UtilityTrait
  */
 trait UtilityTrait
 {
-
-    /**
-     * Clone the Color.
-     * @return Color A new Color object.
-     */
-    public function clone(): static
-    {
-        return new static($this->r, $this->g, $this->b, $this->a);
-    }
 
     /**
      * Get the hex string of the Colour.
@@ -55,24 +45,6 @@ trait UtilityTrait
     protected function getHSV(): array
     {
         return static::RGB2HSV($this->r, $this->g, $this->b);
-    }
-
-    /**
-     * Set the RGBA values of the Color.
-     * @param int|float $r The red value.
-     * @param int|float $g The green value.
-     * @param int|float $b The blue value.
-     * @param int|float $a The alpha value.
-     * @return Color The Color object.
-     */
-    protected function setColor(int|float $r, int|float $g, int|float $b, int|float $a): static
-    {
-        $this->r = static::clamp($r, 0, 255);
-        $this->g = static::clamp($g, 0, 255);
-        $this->b = static::clamp($b, 0, 255);
-        $this->a = static::clamp($a, 0, 1);
-
-        return $this;
     }
 
 }

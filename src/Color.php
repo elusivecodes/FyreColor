@@ -3,27 +3,25 @@ declare(strict_types=1);
 
 namespace Fyre\Color;
 
-use
-    Fyre\Color\Traits\AttributesTrait,
-    Fyre\Color\Traits\ConversionTrait,
-    Fyre\Color\Traits\CreateTrait,
-    Fyre\Color\Traits\ManipulateTrait,
-    Fyre\Color\Traits\OutputTrait,
-    Fyre\Color\Traits\PaletteTrait,
-    Fyre\Color\Traits\SchemesTrait,
-    Fyre\Color\Traits\StaticTrait,
-    Fyre\Color\Traits\UtilityTrait;
+use Fyre\Color\Traits\AttributesTrait;
+use Fyre\Color\Traits\ConversionTrait;
+use Fyre\Color\Traits\CreateTrait;
+use Fyre\Color\Traits\ManipulateTrait;
+use Fyre\Color\Traits\OutputTrait;
+use Fyre\Color\Traits\PaletteTrait;
+use Fyre\Color\Traits\SchemesTrait;
+use Fyre\Color\Traits\StaticTrait;
+use Fyre\Color\Traits\UtilityTrait;
 
-use function
-    round;
+use function round;
 
 /**
  * Color
  */
-class Color implements ColorInterface
+class Color
 {
 
-    const COLORS = [
+    protected const COLORS = [
         'aliceblue' => '#f0f8ff',
         'antiquewhite' => '#faebd7',
         'aqua' => '#00ffff',
@@ -174,22 +172,26 @@ class Color implements ColorInterface
         'yellowgreen' => '#9acd32'
     ];
 
-    use
-        AttributesTrait,
-        ConversionTrait,
-        CreateTrait,
-        ManipulateTrait,
-        OutputTrait,
-        PaletteTrait,
-        SchemesTrait,
-        StaticTrait,
-        UtilityTrait;
+    protected float $r;
+    protected float $g;
+    protected float $b;
+    protected float $a;
+
+    use AttributesTrait;
+    use ConversionTrait;
+    use CreateTrait;
+    use ManipulateTrait;
+    use OutputTrait;
+    use PaletteTrait;
+    use SchemesTrait;
+    use StaticTrait;
+    use UtilityTrait;
 
     /**
      * New Color constructor.
      * @param int|float $r The red value, or the brightness value.
      * @param int|float $g The green value or the alpha value.
-     * @param int|float|null $g he blue value.
+     * @param int|float|null $g The blue value.
      * @param int|float $a The alpha value.
      * @return Color A new Color object.
      */

@@ -1,6 +1,6 @@
 # FyreColor
 
-**FyreColor** is a free, open-source color manipulation library for *PHP*.
+**FyreColor** is a free, open-source immutable color manipulation library for *PHP*.
 
 It is a modern library, and features full support for RGB, HSL, HSV, CMY and CMYK color-spaces.
 
@@ -30,7 +30,6 @@ In PHP:
 
 ```php
 use Fyre\Color\Color;
-use Fyre\Color\ColorImmutable;
 ```
 
 
@@ -54,16 +53,6 @@ $color = new Color($red, $green, $blue, $alpha);
 
 ```php
 $color = new Color($brightness, $alpha);
-```
-
-**Immutable Colors**
-
-By default, *Color* objects are mutable, but if you wish to create an immutable reference you can use the following syntax.
-
-Immutable *Color* objects return a new *ColorImmutable* whenever they are modified.
-
-```php
-$color = new ColorImmutable($red, $green, $blue, $alpha);
 ```
 
 ## Color Creation
@@ -129,14 +118,6 @@ Create a new *Color* from HSV values.
 
 ```php
 $color = Color::fromHSV($hue, $saturation, $value, $alpha);
-```
-
-**Clone**
-
-Create a new *Color* from an existing *Color*.
-
-```php
-$clone = $color->clone();
 ```
 
 
@@ -234,7 +215,7 @@ Set the alpha value of the color.
 - `$alpha` is a number between *0* and *1*.
 
 ```php
-$color->setAlpha($alpha);
+$newColor = $color->setAlpha($alpha);
 ```
 
 **Set Brightness**
@@ -244,7 +225,7 @@ Set the brightness value of the color.
 - `$brightness` is a number between *0* and *100*.
 
 ```php
-$color->setBrightness($brightness);
+$newColor = $color->setBrightness($brightness);
 ```
 
 **Set Hue**
@@ -254,7 +235,7 @@ Set the hue value of the color.
 - `$hue` is a number between *0* and *360*.
 
 ```php
-$color->setHue($hue);
+$newColor = $color->setHue($hue);
 ```
 
 **Set Saturation**
@@ -264,7 +245,7 @@ Set the saturation value of the color.
 - `$saturation` is a number between *0* and *100*.
 
 ```php
-$color->setSaturation($saturation);
+$newColor = $color->setSaturation($saturation);
 ```
 
 
@@ -277,7 +258,7 @@ Darken the color by a specified amount.
 - `$amount` is a number between *0* and *1*.
 
 ```php
-$color->darken($amount);
+$newColor = $color->darken($amount);
 ```
 
 **Invert**
@@ -285,7 +266,7 @@ $color->darken($amount);
 Invert the color.
 
 ```php
-$color->invert();
+$newColor = $color->invert();
 ```
 
 **Lighten**
@@ -295,7 +276,7 @@ Lighten the color by a specified amount.
 - `$amount` is a number between *0* and *1*.
 
 ```php
-$color->lighten($amount);
+$newColor = $color->lighten($amount);
 ```
 
 **Shade**
@@ -305,7 +286,7 @@ Shade the color by a specified amount.
 - `$amount` is a number between *0* and *1*.
 
 ```php
-$color->shade($amount);
+$newColor = $color->shade($amount);
 ```
 
 **Tint**
@@ -315,7 +296,7 @@ Tint the color by a specified amount.
 - `$amount` is a number between *0* and *1*.
 
 ```php
-$color->tint($amount);
+$newColor = $color->tint($amount);
 ```
 
 **Tone**
@@ -325,7 +306,7 @@ Tone the color by a specified amount.
 - `$amount` is a number between *0* and *1*.
 
 ```php
-$color->tone($amount);
+$newColor = $color->tone($amount);
 ```
 
 
@@ -456,9 +437,9 @@ Find an optimally contrasting color for another color.
 $contrastColor = Color::findContrast($color1, $color2, $minContrast, $stepSize);
 ```
 
-If `color2` value is *null*, a clone of `color1` will be used instead.
+If `$color2` value is *null*, `$color1` will be used instead.
 
-This method will tint/shade `color2` until it meets a minimum contrast threshold with `color1`, then the new color will be returned. If no valid contrast value can be found, this method will return *null* instead.
+This method will tint/shade `$color2` until it meets a minimum contrast threshold with `$color1`, then the new color will be returned. If no valid contrast value can be found, this method will return *null* instead.
 
 **Mix**
 

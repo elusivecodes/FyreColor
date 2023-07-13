@@ -1,13 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Color;
+namespace Tests;
 
-use
-    Fyre\Color\Color,
-    RuntimeException;
+use Fyre\Color\Color;
+use RuntimeException;
 
-trait CreateTest
+trait CreateTestTrait
 {
 
     public function testConstructorRed(): void
