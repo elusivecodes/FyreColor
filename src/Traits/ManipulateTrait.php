@@ -12,7 +12,7 @@ trait ManipulateTrait
     /**
      * Darken the color by a specified amount.
      * @param int|float $amount The amount to darken the color by. (0, 1)
-     * @return Color The darkened Color object.
+     * @return Color A new Color.
      */
     public function darken(int|float $amount): static
     {
@@ -25,7 +25,7 @@ trait ManipulateTrait
 
     /**
      * Invert the color.
-     * @return Color The inverted Color object.
+     * @return Color A new Color.
      */
     public function invert(): static
     {
@@ -40,7 +40,7 @@ trait ManipulateTrait
     /**
      * Lighten the color by a specified amount.
      * @param int|float $amount The amount to lighten the color by. (0, 1)
-     * @return Color The lightened Color object.
+     * @return Color A new Color.
      */
     public function lighten(int|float $amount): static
     {
@@ -54,7 +54,7 @@ trait ManipulateTrait
     /**
      * Shade the color by a specified amount.
      * @param int|float $amount The amount to shade the color by. (0, 1)
-     * @return Color The shaded Color object.
+     * @return Color A new Color.
      */
     public function shade(int|float $amount): static
     {
@@ -71,7 +71,7 @@ trait ManipulateTrait
     /**
      * Tint the color by a specified amount.
      * @param int|float $amount The amount to tint the color by. (0, 1)
-     * @return Color The tinted Color object.
+     * @return Color A new Color.
      */
     public function tint(int|float $amount): static
     {
@@ -88,7 +88,7 @@ trait ManipulateTrait
     /**
      * Tone the color by a specified amount.
      * @param int|float $amount The amount to tone the color by. (0, 1)
-     * @return Color The toned Color object.
+     * @return Color A new Color.
      */
     public function tone(int|float $amount): static
     {

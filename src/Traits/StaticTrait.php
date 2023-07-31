@@ -81,7 +81,7 @@ trait StaticTrait
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
      * @param int|float $amount The amount to mix them by. (0, 1)
-     * @return Color A new Color object.
+     * @return Color A new Color.
      */
     public static function mix(Color $color1, Color $color2, int|float $amount): static
     {
@@ -98,7 +98,7 @@ trait StaticTrait
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
      * @param int|float $amount The amount to multiply them by. (0, 1)
-     * @return Color A new Color object.
+     * @return Color A new Color.
      */
     public static function multiply(Color $color1, Color $color2, int|float $amount): static
     {

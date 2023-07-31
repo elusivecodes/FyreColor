@@ -57,7 +57,7 @@ trait AttributesTrait
     /**
      * Set the alpha value of the color.
      * @param int|float $a The alpha value. (0, 1)
-     * @return Color A new Color object.
+     * @return Color A new Color.
      */
     public function setAlpha(int|float $a): static
     {
@@ -67,7 +67,7 @@ trait AttributesTrait
     /**
      * Set the brightness value of the color.
      * @param int|float $v The brightness value. (0, 100)
-     * @return Color A new Color object.
+     * @return Color A new Color.
      */
     public function setBrightness(int|float $v): static
     {
@@ -80,7 +80,7 @@ trait AttributesTrait
     /**
      * Set the hue value of the color.
      * @param int|float $h The hue value. (0, 360)
-     * @return Color A new Color object.
+     * @return Color A new Color.
      */
     public function setHue(int|float $h): static
     {
@@ -93,7 +93,7 @@ trait AttributesTrait
     /**
      * Set the saturation value of the color.
      * @param int|float $s The saturation value. (0, 100)
-     * @return Color A new Color object.
+     * @return Color A new Color.
      */
     public function setSaturation(int|float $s): static
     {

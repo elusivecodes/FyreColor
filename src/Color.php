@@ -193,7 +193,6 @@ class Color
      * @param int|float $g The green value or the alpha value.
      * @param int|float|null $g The blue value.
      * @param int|float $a The alpha value.
-     * @return Color A new Color object.
      */
     public function __construct(int|float $r = 0, int|float $g = 1, int|float|null $b = null, int|float $a = 1)
     {
