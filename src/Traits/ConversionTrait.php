@@ -248,17 +248,11 @@ trait ConversionTrait
 
         $h = 0;
 
-        switch ($max) {
-            case $r:
-                $h = $deltaB - $deltaG;
-                break;
-            case $g:
-                $h = 1 / 3 + $deltaR - $deltaB;
-                break;
-            case $b:
-                $h = 2 / 3 + $deltaG - $deltaR;
-                break;
-        }
+        $h = match ($max) {
+            $r => $deltaB - $deltaG,
+            $g => 1 / 3 + $deltaR - $deltaB,
+            $b => 2 / 3 + $deltaG - $deltaR
+        };
 
         $h = fmod($h + 1, 1);
 
@@ -302,17 +296,11 @@ trait ConversionTrait
 
         $h = 0;
 
-        switch ($max) {
-            case $r:
-                $h = $deltaB - $deltaG;
-                break;
-            case $g:
-                $h = 1 / 3 + $deltaR - $deltaB;
-                break;
-            case $b:
-                $h = 2 / 3 + $deltaG - $deltaR;
-                break;
-        }
+        $h = match ($max) {
+            $r => $deltaB - $deltaG,
+            $g => 1 / 3 + $deltaR - $deltaB,
+            $b => 2 / 3 + $deltaG - $deltaR
+        };
 
         $h = fmod($h + 1, 1);
 
