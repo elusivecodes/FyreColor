@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
+use Fyre\Color\Color;
 use RuntimeException;
 
 use function array_key_exists;
@@ -20,7 +21,6 @@ use function trim;
  */
 trait CreateTrait
 {
-
     protected const COLORS = [
         'aliceblue' => '#f0f8ff',
         'antiquewhite' => '#faebd7',
@@ -178,9 +178,9 @@ trait CreateTrait
      * @param int|float $m The magenta value. (0, 100)
      * @param int|float $y The yellow value. (0, 100)
      * @param int|float $a The alpha value. (0, 1)
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      */
-    public static function fromCMY(int|float $c, int|float $m, int|float $y, int|float $a = 1): static
+    public static function fromCMY(float|int $c, float|int $m, float|int $y, float|int $a = 1): static
     {
         [$r, $g, $b] = static::CMY2RGB($c, $m, $y);
 
@@ -194,9 +194,9 @@ trait CreateTrait
      * @param int|float $y The yellow value. (0, 100)
      * @param int|float $k The key value. (0, 100)
      * @param int|float $a The alpha value. (0, 1)
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      */
-    public static function fromCMYK(int|float $c, int|float $m, int|float $y, int|float $k, int|float $a = 1): static
+    public static function fromCMYK(float|int $c, float|int $m, float|int $y, float|int $k, float|int $a = 1): static
     {
         [$c, $m, $y] = static::CMYK2CMY($c, $m, $y, $k);
 
@@ -206,7 +206,7 @@ trait CreateTrait
     /**
      * Create a new Color from a hex color string.
      * @param string $string The hex color string.
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      * @throws RuntimeException if the hex string is not valid.
      */
     public static function fromHexString(string $string): static
@@ -245,9 +245,9 @@ trait CreateTrait
      * @param int|float $s The saturation value. (0, 100)
      * @param int|float $l The lightness value. (0, 100)
      * @param int|float $a The alpha value. (0, 1)
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      */
-    public static function fromHSL(int|float $h, int|float $s, int|float $l, int|float $a = 1): static
+    public static function fromHSL(float|int $h, float|int $s, float|int $l, float|int $a = 1): static
     {
         [$r, $g, $b] = static::HSL2RGB($h, $s, $l);
 
@@ -257,7 +257,7 @@ trait CreateTrait
     /**
      * Create a new Color from a HSL color string.
      * @param string $string The HSL color string.
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      * @throws RuntimeException if the HSL string is not valid.
      */
     public static function fromHSLString(string $string): static
@@ -289,9 +289,9 @@ trait CreateTrait
      * @param int|float $s The saturation value. (0, 100)
      * @param int|float $v The brightness value. (0, 100)
      * @param int|float $a The alpha value. (0, 1)
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      */
-    public static function fromHSV(int|float $h, int|float $s, int|float $v, int|float $a = 1): static
+    public static function fromHSV(float|int $h, float|int $s, float|int $v, float|int $a = 1): static
     {
         [$r, $g, $b] = static::HSV2RGB($h, $s, $v);
 
@@ -304,9 +304,9 @@ trait CreateTrait
      * @param int|float $g The green value. (0, 255)
      * @param int|float $b The blue value. (0, 255)
      * @param int|float $a The alpha value. (0, 1)
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      */
-    public static function fromRGB(int|float $r, int|float $g, int|float $b, int|float $a = 1): static
+    public static function fromRGB(float|int $r, float|int $g, float|int $b, float|int $a = 1): static
     {
         return new static($r, $g, $b, $a);
     }
@@ -314,7 +314,7 @@ trait CreateTrait
     /**
      * Create a new Color from a RGB color string.
      * @param string $string The RGB color string.
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      * @throws RuntimeException if the RGB string is not valid.
      */
     public static function fromRGBString(string $string): static
@@ -343,7 +343,7 @@ trait CreateTrait
     /**
      * Create a new Color from a HTML color string.
      * @param string $string The HTML color string.
-     * @return \Fyre\Color\Color A new Color.
+     * @return Color A new Color.
      * @throws RuntimeException if the color string is not valid.
      */
     public static function fromString(string $string): static
@@ -373,5 +373,4 @@ trait CreateTrait
 
         throw new RuntimeException('Invalid color string: '.$string);
     }
-
 }

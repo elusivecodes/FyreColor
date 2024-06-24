@@ -7,6 +7,21 @@ use Fyre\Color\Color;
 
 trait FormattingTestTrait
 {
+    public function testLabel(): void
+    {
+        $this->assertSame(
+            'saddlebrown',
+            Color::fromRGB(120, 50, 50)->label()
+        );
+    }
+
+    public function testToHex(): void
+    {
+        $this->assertSame(
+            '#783232',
+            Color::fromRGB(120, 50, 50)->toHexString()
+        );
+    }
 
     public function testToHexShort(): void
     {
@@ -24,35 +39,11 @@ trait FormattingTestTrait
         );
     }
 
-    public function testToHex(): void
-    {
-        $this->assertSame(
-            '#783232',
-            Color::fromRGB(120, 50, 50)->toHexString()
-        );
-    }
-
     public function testToHexWithAlpha(): void
     {
         $this->assertSame(
             '#78323266',
             Color::fromRGB(120, 50, 50, .4)->toHexString()
-        );
-    }
-
-    public function testToRGB(): void
-    {
-        $this->assertSame(
-            'rgb(120 50 50)',
-            Color::fromRGB(120, 50, 50)->toRGBString()
-        );
-    }
-
-    public function testToRGBA(): void
-    {
-        $this->assertSame(
-            'rgb(120 50 50 / 50%)',
-            Color::fromRGB(120, 50, 50, .5)->toRGBString()
         );
     }
 
@@ -72,12 +63,19 @@ trait FormattingTestTrait
         );
     }
 
-    public function testLabel(): void
+    public function testToRGB(): void
     {
         $this->assertSame(
-            'saddlebrown',
-            Color::fromRGB(120, 50, 50)->label()
+            'rgb(120 50 50)',
+            Color::fromRGB(120, 50, 50)->toRGBString()
         );
     }
 
+    public function testToRGBA(): void
+    {
+        $this->assertSame(
+            'rgb(120 50 50 / 50%)',
+            Color::fromRGB(120, 50, 50, .5)->toRGBString()
+        );
+    }
 }

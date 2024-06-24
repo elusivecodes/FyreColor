@@ -8,12 +8,11 @@ namespace Fyre\Color\Traits;
  */
 trait AttributesTrait
 {
-
     /**
      * Get the alpha value of the color.
      * @return int|float The alpha value. (0, 1)
      */
-    public function getAlpha(): int|float
+    public function getAlpha(): float|int
     {
         return $this->a;
     }
@@ -22,7 +21,7 @@ trait AttributesTrait
      * Get the brightness value of the color.
      * @return int|float The brightness value. (0, 100)
      */
-    public function getBrightness(): int|float
+    public function getBrightness(): float|int
     {
         return $this->getHSV()[2];
     }
@@ -31,7 +30,7 @@ trait AttributesTrait
      * Get the hue value of the color.
      * @return int|float The hue value. (0, 360)
      */
-    public function getHue(): int|float
+    public function getHue(): float|int
     {
         return $this->getHSV()[0];
     }
@@ -40,13 +39,13 @@ trait AttributesTrait
      * Get the saturation value of the color.
      * @return int|float The saturation value. (0, 100)
      */
-    public function getSaturation(): int|float
+    public function getSaturation(): float|int
     {
         return $this->getHSV()[1];
     }
 
     /**
-     * Get the relative luminance value of the color 
+     * Get the relative luminance value of the color
      * @return float The relative luminance value. (0, 1)
      */
     public function luma(): float
@@ -59,7 +58,7 @@ trait AttributesTrait
      * @param int|float $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
-    public function setAlpha(int|float $a): static
+    public function setAlpha(float|int $a): static
     {
         return new static($this->r, $this->g, $this->b, $a);
     }
@@ -69,7 +68,7 @@ trait AttributesTrait
      * @param int|float $v The brightness value. (0, 100)
      * @return Color A new Color.
      */
-    public function setBrightness(int|float $v): static
+    public function setBrightness(float|int $v): static
     {
         [$h, $s, $_] = $this->getHSV();
         [$r, $g, $b] = static::HSV2RGB($h, $s, $v);
@@ -82,7 +81,7 @@ trait AttributesTrait
      * @param int|float $h The hue value. (0, 360)
      * @return Color A new Color.
      */
-    public function setHue(int|float $h): static
+    public function setHue(float|int $h): static
     {
         [$_, $s, $v] = $this->getHSV();
         [$r, $g, $b] = static::HSV2RGB($h, $s, $v);
@@ -95,12 +94,11 @@ trait AttributesTrait
      * @param int|float $s The saturation value. (0, 100)
      * @return Color A new Color.
      */
-    public function setSaturation(int|float $s): static
+    public function setSaturation(float|int $s): static
     {
         [$h, $_, $v] = $this->getHSV();
         [$r, $g, $b] = static::HSV2RGB($h, $s, $v);
 
         return new static($r, $g, $b, $this->a);
     }
-
 }

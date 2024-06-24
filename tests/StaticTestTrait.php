@@ -7,7 +7,6 @@ use Fyre\Color\Color;
 
 trait StaticTestTrait
 {
-
     public function testContrast(): void
     {
         $this->assertSame(
@@ -47,24 +46,6 @@ trait StaticTestTrait
         );
     }
 
-    public function testFindContrastTwoColors(): void
-    {
-        $color = Color::findContrast(
-            new Color(203, 213, 255),
-            new Color(122, 143, 255)
-        );
-
-        $this->assertInstanceOf(
-            Color::class,
-            $color
-        );
-
-        $this->assertSame(
-            '#4c599e',
-            (string) $color
-        );
-    }
-
     public function testFindContrastMinContrast(): void
     {
         $color = Color::findContrast(
@@ -99,6 +80,24 @@ trait StaticTestTrait
 
         $this->assertSame(
             '#495699',
+            (string) $color
+        );
+    }
+
+    public function testFindContrastTwoColors(): void
+    {
+        $color = Color::findContrast(
+            new Color(203, 213, 255),
+            new Color(122, 143, 255)
+        );
+
+        $this->assertInstanceOf(
+            Color::class,
+            $color
+        );
+
+        $this->assertSame(
+            '#4c599e',
             (string) $color
         );
     }
@@ -156,5 +155,4 @@ trait StaticTestTrait
             (string) $color3
         );
     }
-
 }

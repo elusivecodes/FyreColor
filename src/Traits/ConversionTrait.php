@@ -14,7 +14,6 @@ use function round;
  */
 trait ConversionTrait
 {
-
     /**
      * Convert CMY color values to CMYK.
      * @param int|float $c The cyan value. (0, 100)
@@ -22,7 +21,7 @@ trait ConversionTrait
      * @param int|float $y The yellow value. (0, 100)
      * @return array An array containing the CMYK values.
      */
-    protected static function CMY2CMYK(int|float $c, int|float $m, int|float $y): array
+    protected static function CMY2CMYK(float|int $c, float|int $m, float|int $y): array
     {
         $k = min($c, $m, $y);
 
@@ -47,7 +46,7 @@ trait ConversionTrait
      * @param int|float $y The yellow value. (0, 100)
      * @return array An array containing the RGB values.
      */
-    protected static function CMY2RGB(int|float $c, int|float $m, int|float $y): array
+    protected static function CMY2RGB(float|int $c, float|int $m, float|int $y): array
     {
         return [
             round((1 - $c / 100) * 255, 2),
@@ -64,7 +63,7 @@ trait ConversionTrait
      * @param int|float $k The key value. (0, 100)
      * @return array An array containing the CMY values.
      */
-    protected static function CMYK2CMY(int|float $c, int|float $m, int|float $y, int|float $k): array
+    protected static function CMYK2CMY(float|int $c, float|int $m, float|int $y, float|int $k): array
     {
         $k /= 100;
 
@@ -82,7 +81,7 @@ trait ConversionTrait
      * @param int|float $l The lightness value. (0, 100)
      * @return array An array containing the RGB values.
      */
-    protected static function HSL2RGB(int|float $h, int|float $s, int|float $l): array
+    protected static function HSL2RGB(float|int $h, float|int $s, float|int $l): array
     {
         if (!$l) {
             return [0, 0, 0];
@@ -118,7 +117,7 @@ trait ConversionTrait
      * @param int|float $v The brightness value (0, 100)
      * @return array An array containing the RGB values.
      */
-    protected static function HSV2RGB(int|float $h, int|float $s, int|float $v): array
+    protected static function HSV2RGB(float|int $h, float|int $s, float|int $v): array
     {
         $v /= 100;
 
@@ -185,7 +184,7 @@ trait ConversionTrait
      * @param int|float $b The blue value. (0, 255)
      * @return array An array containing the CMY values.
      */
-    protected static function RGB2CMY(int|float $r, int|float $g, int|float $b): array
+    protected static function RGB2CMY(float|int $r, float|int $g, float|int $b): array
     {
         return [
             round((1 - ($r / 255)) * 100, 2),
@@ -195,29 +194,13 @@ trait ConversionTrait
     }
 
     /**
-     * Calculate the relative luminance of an RGB color.
-     * @param int|float $r The red value. (0, 255)
-     * @param int|float $g The green value. (0, 255)
-     * @param int|float $b The blue value. (0, 255)
-     * @return float The relative luminance value.
-     */
-    protected static function RGB2Luma(int|float $r, int|float $g, int|float $b): float
-    {
-        $r = static::RGBLumaValue($r);
-        $g = static::RGBLumaValue($g);
-        $b = static::RGBLumaValue($b);
-
-        return (.2126 * $r) + (.7152 * $g) + (.0722 * $b);
-    }
-
-    /**
      * Convert RGB color values to HSL.
      * @param int|float $r The red value. (0, 255)
      * @param int|float $g The green value. (0, 255)
      * @param int|float $b The blue value. (0, 255)
      * @return array An array containing the HSL values.
      */
-    protected static function RGB2HSL(int|float $r, int|float $g, int|float $b): array
+    protected static function RGB2HSL(float|int $r, float|int $g, float|int $b): array
     {
         $r /= 255;
         $g /= 255;
@@ -270,7 +253,7 @@ trait ConversionTrait
      * @param int|float $b The blue value. (0, 255)
      * @return array An array containing the HSV values.
      */
-    protected static function RGB2HSV(int|float $r, int|float $g, int|float $b): array
+    protected static function RGB2HSV(float|int $r, float|int $g, float|int $b): array
     {
         $r /= 255;
         $g /= 255;
@@ -312,13 +295,29 @@ trait ConversionTrait
     }
 
     /**
+     * Calculate the relative luminance of an RGB color.
+     * @param int|float $r The red value. (0, 255)
+     * @param int|float $g The green value. (0, 255)
+     * @param int|float $b The blue value. (0, 255)
+     * @return float The relative luminance value.
+     */
+    protected static function RGB2Luma(float|int $r, float|int $g, float|int $b): float
+    {
+        $r = static::RGBLumaValue($r);
+        $g = static::RGBLumaValue($g);
+        $b = static::RGBLumaValue($b);
+
+        return (.2126 * $r) + (.7152 * $g) + (.0722 * $b);
+    }
+
+    /**
      * Calculate the R, G or B value of a hue.
      * @param int|float $v1 The first value.
      * @param int|float $v2 The second value.
      * @param int|float $vH The hue value.
      * @return int|float The R, G or B value.
      */
-    protected static function RGBHue(int|float $v1, int|float $v2, int|float $vH): int|float
+    protected static function RGBHue(float|int $v1, float|int $v2, float|int $vH): float|int
     {
         $vH = fmod($vH + 1, 1);
 
@@ -342,7 +341,7 @@ trait ConversionTrait
      * @param int|float $v The value.
      * @return int|float The R, G or B value.
      */
-    protected static function RGBLumaValue(int|float $v): int|float
+    protected static function RGBLumaValue(float|int $v): float|int
     {
         $v /= 255;
 
@@ -352,5 +351,4 @@ trait ConversionTrait
 
         return pow((($v + .055) / 1.055), 2.4);
     }
-
 }

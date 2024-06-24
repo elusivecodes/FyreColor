@@ -7,7 +7,6 @@ use Fyre\Color\Color;
 
 trait ManipulationTestTrait
 {
-
     public function testDarken(): void
     {
         $color1 = Color::fromHSV(120, 50, 50);
@@ -103,5 +102,4 @@ trait ManipulationTestTrait
             $color2->toString(),
         );
     }
-
 }

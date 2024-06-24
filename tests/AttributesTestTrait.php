@@ -7,7 +7,6 @@ use Fyre\Color\Color;
 
 trait AttributesTestTrait
 {
-
     public function testGetAlpha(): void
     {
         $this->assertSame(
@@ -111,5 +110,4 @@ trait AttributesTestTrait
             $color2->getSaturation(),
         );
     }
-
 }

@@ -20,12 +20,6 @@ use function round;
  */
 class Color
 {
-
-    protected float $r;
-    protected float $g;
-    protected float $b;
-    protected float $a;
-
     use AttributesTrait;
     use ConversionTrait;
     use CreateTrait;
@@ -36,14 +30,19 @@ class Color
     use StaticTrait;
     use UtilityTrait;
 
+    protected float $a;
+    protected float $b;
+    protected float $g;
+    protected float $r;
+
     /**
      * New Color constructor.
      * @param int|float $r The red value, or the brightness value.
      * @param int|float $g The green value or the alpha value.
-     * @param int|float|null $g The blue value.
      * @param int|float $a The alpha value.
+     * @param int|float|null $g The blue value.
      */
-    public function __construct(int|float $r = 0, int|float $g = 1, int|float|null $b = null, int|float $a = 1)
+    public function __construct(float|int $r = 0, float|int $g = 1, float|int|null $b = null, float|int $a = 1)
     {
         if ($b === null) {
             $a = $g;
@@ -55,5 +54,4 @@ class Color
         $this->b = static::clamp($b, 0, 255);
         $this->a = static::clamp($a, 0, 1);
     }
-
 }

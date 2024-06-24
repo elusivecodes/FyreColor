@@ -17,7 +17,6 @@ use function strlen;
  */
 trait StaticTrait
 {
-
     /**
      * Get the contrast value between two colors.
      * @param Color $color1 The first Color.
@@ -55,7 +54,7 @@ trait StaticTrait
      * @param int|float $stepSize The step size.
      * @return Color|null The new Color.
      */
-    public static function findContrast(Color $color1, Color|null $color2 = null, int|float $minContrast = 4.5, int|float $stepSize = .01): Color|null
+    public static function findContrast(Color $color1, Color|null $color2 = null, float|int $minContrast = 4.5, float|int $stepSize = .01): Color|null
     {
         $color2 ??= $color1;
 
@@ -65,7 +64,7 @@ trait StaticTrait
 
         $methods = ['tint', 'shade'];
         for ($i = $stepSize; $i <= 1; $i += $stepSize) {
-            foreach ($methods AS $method) {
+            foreach ($methods as $method) {
                 $tempColor = $color2->$method($i);
                 if (static::contrast($color1, $tempColor) >= $minContrast) {
                     return $tempColor;
@@ -83,7 +82,7 @@ trait StaticTrait
      * @param int|float $amount The amount to mix them by. (0, 1)
      * @return Color A new Color.
      */
-    public static function mix(Color $color1, Color $color2, int|float $amount): static
+    public static function mix(Color $color1, Color $color2, float|int $amount): static
     {
         return new static(
             static::lerp($color1->r, $color2->r, $amount),
@@ -100,7 +99,7 @@ trait StaticTrait
      * @param int|float $amount The amount to multiply them by. (0, 1)
      * @return Color A new Color.
      */
-    public static function multiply(Color $color1, Color $color2, int|float $amount): static
+    public static function multiply(Color $color1, Color $color2, float|int $amount): static
     {
         return new static(
             static::lerp(
@@ -128,24 +127,24 @@ trait StaticTrait
 
     /**
      * Clamp a value between a min and max.
-     * @param int|float $value The value to clamp.
      * @param int|float $min The minimum value of the clamped range.
      * @param int|float $max The maximum value of the clamped range.
+     * @param int|float $value The value to clamp.
      * @return float The clamped value.
      */
-    protected static function clamp(int|float $val, int|float $min = 0, int|float $max = 100): float
+    protected static function clamp(float|int $val, float|int $min = 0, float|int $max = 100): float
     {
         return (float) max($min, min($max, $val));
     }
 
     /**
      * Linear interpolation from one value to another.
+     * @param int|float $amount The amount to interpolate.
      * @param int|float $v1 The starting value.
      * @param int|float $v2 The ending value.
-     * @param int|float $amount The amount to interpolate.
      * @return float The interpolated value.
      */
-    protected static function lerp(int|float $a, int|float $b, int|float $amount): float
+    protected static function lerp(float|int $a, float|int $b, float|int $amount): float
     {
         return round($a * (1 - $amount) + $b * $amount, 2);
     }
@@ -155,7 +154,8 @@ trait StaticTrait
      * @param string $hex The hex string.
      * @return string The hex string.
      */
-    protected static function toHex(string $hex) {
+    protected static function toHex(string $hex)
+    {
         $length = strlen($hex);
 
         if (
@@ -179,5 +179,4 @@ trait StaticTrait
 
         return $hex;
     }
-
 }

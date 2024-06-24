@@ -11,7 +11,6 @@ use function sprintf;
  */
 trait UtilityTrait
 {
-
     /**
      * Get the hex string of the Colour.
      * @return string The hex string.
@@ -46,5 +45,4 @@ trait UtilityTrait
     {
         return static::RGB2HSV($this->r, $this->g, $this->b);
     }
-
 }

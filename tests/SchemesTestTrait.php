@@ -9,7 +9,6 @@ use function array_map;
 
 trait SchemesTestTrait
 {
-
     public function testAnalogous(): void
     {
         $this->assertSame(
@@ -74,5 +73,4 @@ trait SchemesTestTrait
             )
         );
     }
-
 }

@@ -8,7 +8,6 @@ namespace Fyre\Color\Traits;
  */
 trait SchemesTrait
 {
-
     /**
      * Create an array with 2 analogous color variations.
      * @return array An array containing 2 analogous color variations.
@@ -86,5 +85,4 @@ trait SchemesTrait
             new static($r2, $g2, $b2, $this->a)
         ];
     }
-
 }

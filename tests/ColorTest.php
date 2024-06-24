@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 final class ColorTest extends TestCase
 {
-
     use AttributesTestTrait;
     use CreateTestTrait;
     use FormattingTestTrait;

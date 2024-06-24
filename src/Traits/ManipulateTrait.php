@@ -8,13 +8,12 @@ namespace Fyre\Color\Traits;
  */
 trait ManipulateTrait
 {
-
     /**
      * Darken the color by a specified amount.
      * @param int|float $amount The amount to darken the color by. (0, 1)
      * @return Color A new Color.
      */
-    public function darken(int|float $amount): static
+    public function darken(float|int $amount): static
     {
         [$h, $s, $l] = $this->getHSL();
         $l -= $l * $amount;
@@ -42,7 +41,7 @@ trait ManipulateTrait
      * @param int|float $amount The amount to lighten the color by. (0, 1)
      * @return Color A new Color.
      */
-    public function lighten(int|float $amount): static
+    public function lighten(float|int $amount): static
     {
         [$h, $s, $l] = $this->getHSL();
         $l += (100 - $l) * $amount;
@@ -56,7 +55,7 @@ trait ManipulateTrait
      * @param int|float $amount The amount to shade the color by. (0, 1)
      * @return Color A new Color.
      */
-    public function shade(int|float $amount): static
+    public function shade(float|int $amount): static
     {
         $color = static::mix($this, new static(0), $amount);
 
@@ -73,7 +72,7 @@ trait ManipulateTrait
      * @param int|float $amount The amount to tint the color by. (0, 1)
      * @return Color A new Color.
      */
-    public function tint(int|float $amount): static
+    public function tint(float|int $amount): static
     {
         $color = static::mix($this, new static(100), $amount);
 
@@ -90,7 +89,7 @@ trait ManipulateTrait
      * @param int|float $amount The amount to tone the color by. (0, 1)
      * @return Color A new Color.
      */
-    public function tone(int|float $amount): static
+    public function tone(float|int $amount): static
     {
         $color = static::mix($this, new static(50), $amount);
 
@@ -101,5 +100,4 @@ trait ManipulateTrait
             $this->a
         );
     }
-
 }

@@ -14,7 +14,6 @@ use function array_map;
  */
 trait PaletteTrait
 {
-
     /**
      * Create a palette object with a specified number of shades, tints and tone variations.
      * @param int $shades The number of shades to generate.
@@ -69,5 +68,4 @@ trait PaletteTrait
             array_keys(array_fill(0, $tones, 0))
         );
     }
-
 }

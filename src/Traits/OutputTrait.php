@@ -3,17 +3,17 @@ declare(strict_types=1);
 
 namespace Fyre\Color\Traits;
 
-use const PHP_INT_MAX;
-
 use function array_search;
+
 use function round;
+
+use const PHP_INT_MAX;
 
 /**
  * OutputTrait
  */
 trait OutputTrait
 {
-
     /**
      * Return a HTML string representation of the color.
      * @return string The HTML color string.
@@ -31,7 +31,7 @@ trait OutputTrait
     {
         $closestDist = PHP_INT_MAX;
 
-        foreach (static::COLORS AS $label => $color) {
+        foreach (static::COLORS as $label => $color) {
             $color = static::fromHexString($color);
             $dist = static::dist($this, $color);
 
@@ -117,5 +117,4 @@ trait OutputTrait
 
         return static::toHex($hex);
     }
-
 }
