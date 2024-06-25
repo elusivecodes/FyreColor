@@ -502,16 +502,16 @@
         },
         {
             "name": "fyre/php-cs-fixer-config",
-            "version": "v1.0.4",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elusivecodes/PHP-CS-Fixer-Config.git",
-                "reference": "fb878b6003f31a0b766d321ca0bd51467db31d9b"
+                "reference": "bdd3e4a99f4365c7a4555cfd063e620a593a734a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/PHP-CS-Fixer-Config/zipball/fb878b6003f31a0b766d321ca0bd51467db31d9b",
-                "reference": "fb878b6003f31a0b766d321ca0bd51467db31d9b",
+                "url": "https://api.github.com/repos/elusivecodes/PHP-CS-Fixer-Config/zipball/bdd3e4a99f4365c7a4555cfd063e620a593a734a",
+                "reference": "bdd3e4a99f4365c7a4555cfd063e620a593a734a",
                 "shasum": ""
             },
             "require": {
@@ -536,9 +536,9 @@
             "description": "PHP-CS-Fixer shareable config for the Fyre style.",
             "support": {
                 "issues": "https://github.com/elusivecodes/PHP-CS-Fixer-Config/issues",
-                "source": "https://github.com/elusivecodes/PHP-CS-Fixer-Config/tree/v1.0.4"
+                "source": "https://github.com/elusivecodes/PHP-CS-Fixer-Config/tree/v1.0.6"
             },
-            "time": "2024-06-25T02:07:20+00:00"
+            "time": "2024-06-25T03:58:42+00:00"
         },
         {
             "name": "myclabs/deep-copy",
