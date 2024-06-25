@@ -10,6 +10,7 @@ trait ManipulateTrait
 {
     /**
      * Darken the color by a specified amount.
+     *
      * @param int|float $amount The amount to darken the color by. (0, 1)
      * @return Color A new Color.
      */
@@ -24,6 +25,7 @@ trait ManipulateTrait
 
     /**
      * Invert the color.
+     *
      * @return Color A new Color.
      */
     public function invert(): static
@@ -38,6 +40,7 @@ trait ManipulateTrait
 
     /**
      * Lighten the color by a specified amount.
+     *
      * @param int|float $amount The amount to lighten the color by. (0, 1)
      * @return Color A new Color.
      */
@@ -52,6 +55,7 @@ trait ManipulateTrait
 
     /**
      * Shade the color by a specified amount.
+     *
      * @param int|float $amount The amount to shade the color by. (0, 1)
      * @return Color A new Color.
      */
@@ -69,6 +73,7 @@ trait ManipulateTrait
 
     /**
      * Tint the color by a specified amount.
+     *
      * @param int|float $amount The amount to tint the color by. (0, 1)
      * @return Color A new Color.
      */
@@ -86,6 +91,7 @@ trait ManipulateTrait
 
     /**
      * Tone the color by a specified amount.
+     *
      * @param int|float $amount The amount to tone the color by. (0, 1)
      * @return Color A new Color.
      */

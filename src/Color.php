@@ -31,12 +31,16 @@ class Color
     use UtilityTrait;
 
     protected float $a;
+
     protected float $b;
+
     protected float $g;
+
     protected float $r;
 
     /**
      * New Color constructor.
+     *
      * @param int|float $r The red value, or the brightness value.
      * @param int|float $g The green value or the alpha value.
      * @param int|float $a The alpha value.

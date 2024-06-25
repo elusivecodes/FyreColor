@@ -14,7 +14,7 @@ trait SchemesTestTrait
         $this->assertSame(
             [
                 '#408060',
-                '#608040'
+                '#608040',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -36,7 +36,7 @@ trait SchemesTestTrait
         $this->assertSame(
             [
                 '#604080',
-                '#804060'
+                '#804060',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -51,7 +51,7 @@ trait SchemesTestTrait
             [
                 '#408080',
                 '#804080',
-                '#804040'
+                '#804040',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -65,7 +65,7 @@ trait SchemesTestTrait
         $this->assertSame(
             [
                 '#404080',
-                '#804040'
+                '#804040',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,

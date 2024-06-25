@@ -169,11 +169,12 @@ trait CreateTrait
         'white' => '#ffffff',
         'whitesmoke' => '#f5f5f5',
         'yellow' => '#ffff00',
-        'yellowgreen' => '#9acd32'
+        'yellowgreen' => '#9acd32',
     ];
 
     /**
      * Create a new Color from CMY values.
+     *
      * @param int|float $c The cyan value. (0, 100)
      * @param int|float $m The magenta value. (0, 100)
      * @param int|float $y The yellow value. (0, 100)
@@ -189,6 +190,7 @@ trait CreateTrait
 
     /**
      * Create a new Color from CMYK values.
+     *
      * @param int|float $c The cyan value. (0, 100)
      * @param int|float $m The magenta value. (0, 100)
      * @param int|float $y The yellow value. (0, 100)
@@ -205,8 +207,10 @@ trait CreateTrait
 
     /**
      * Create a new Color from a hex color string.
+     *
      * @param string $string The hex color string.
      * @return Color A new Color.
+     *
      * @throws RuntimeException if the hex string is not valid.
      */
     public static function fromHexString(string $string): static
@@ -241,6 +245,7 @@ trait CreateTrait
 
     /**
      * Create a new Color from HSL values.
+     *
      * @param int|float $h The hue value. (0, 360)
      * @param int|float $s The saturation value. (0, 100)
      * @param int|float $l The lightness value. (0, 100)
@@ -256,8 +261,10 @@ trait CreateTrait
 
     /**
      * Create a new Color from a HSL color string.
+     *
      * @param string $string The HSL color string.
      * @return Color A new Color.
+     *
      * @throws RuntimeException if the HSL string is not valid.
      */
     public static function fromHSLString(string $string): static
@@ -285,6 +292,7 @@ trait CreateTrait
 
     /**
      * Create a new Color from HSV values.
+     *
      * @param int|float $h The hue value. (0, 360)
      * @param int|float $s The saturation value. (0, 100)
      * @param int|float $v The brightness value. (0, 100)
@@ -300,6 +308,7 @@ trait CreateTrait
 
     /**
      * Create a new Color from RGB values.
+     *
      * @param int|float $r The red value. (0, 255)
      * @param int|float $g The green value. (0, 255)
      * @param int|float $b The blue value. (0, 255)
@@ -313,8 +322,10 @@ trait CreateTrait
 
     /**
      * Create a new Color from a RGB color string.
+     *
      * @param string $string The RGB color string.
      * @return Color A new Color.
+     *
      * @throws RuntimeException if the RGB string is not valid.
      */
     public static function fromRGBString(string $string): static
@@ -342,8 +353,10 @@ trait CreateTrait
 
     /**
      * Create a new Color from a HTML color string.
+     *
      * @param string $string The HTML color string.
      * @return Color A new Color.
+     *
      * @throws RuntimeException if the color string is not valid.
      */
     public static function fromString(string $string): static

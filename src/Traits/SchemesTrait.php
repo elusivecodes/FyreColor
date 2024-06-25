@@ -10,6 +10,7 @@ trait SchemesTrait
 {
     /**
      * Create an array with 2 analogous color variations.
+     *
      * @return array An array containing 2 analogous color variations.
      */
     public function analogous(): array
@@ -20,12 +21,13 @@ trait SchemesTrait
 
         return [
             new static($r1, $g1, $b1, $this->a),
-            new static($r2, $g2, $b2, $this->a)
+            new static($r2, $g2, $b2, $this->a),
         ];
     }
 
     /**
      * Create a complementary color variation.
+     *
      * @return Color A complementary color variation.
      */
     public function complementary(): static
@@ -38,6 +40,7 @@ trait SchemesTrait
 
     /**
      * Create an array with 2 split color variations.
+     *
      * @return array An array containing 2 split color variations.
      */
     public function split(): array
@@ -48,12 +51,13 @@ trait SchemesTrait
 
         return [
             new static($r1, $g1, $b1, $this->a),
-            new static($r2, $g2, $b2, $this->a)
+            new static($r2, $g2, $b2, $this->a),
         ];
     }
 
     /**
      * Create an array with 3 tetradic color variations.
+     *
      * @return array An array containing 3 tetradic color variations.
      */
     public function tetradic(): array
@@ -66,12 +70,13 @@ trait SchemesTrait
         return [
             new static($r1, $g1, $b1, $this->a),
             new static($r2, $g2, $b2, $this->a),
-            new static($r3, $g3, $b3, $this->a)
+            new static($r3, $g3, $b3, $this->a),
         ];
     }
 
     /**
      * Create an array with 2 triadic color variations.
+     *
      * @return array An array containing 2 triadic color variations.
      */
     public function triadic(): array
@@ -82,7 +87,7 @@ trait SchemesTrait
 
         return [
             new static($r1, $g1, $b1, $this->a),
-            new static($r2, $g2, $b2, $this->a)
+            new static($r2, $g2, $b2, $this->a),
         ];
     }
 }

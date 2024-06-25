@@ -16,6 +16,7 @@ trait ConversionTrait
 {
     /**
      * Convert CMY color values to CMYK.
+     *
      * @param int|float $c The cyan value. (0, 100)
      * @param int|float $m The magenta value. (0, 100)
      * @param int|float $y The yellow value. (0, 100)
@@ -35,12 +36,13 @@ trait ConversionTrait
             round(($c / 100 - $k) / (1 - $k) * 100, 2),
             round(($m / 100 - $k) / (1 - $k) * 100, 2),
             round(($y / 100 - $k) / (1 - $k) * 100, 2),
-            round($k * 100, 2)
+            round($k * 100, 2),
         ];
     }
 
     /**
      * Convert CMY color values to RGB.
+     *
      * @param int|float $c The cyan value. (0, 100)
      * @param int|float $m The magenta value. (0, 100)
      * @param int|float $y The yellow value. (0, 100)
@@ -51,12 +53,13 @@ trait ConversionTrait
         return [
             round((1 - $c / 100) * 255, 2),
             round((1 - $m / 100) * 255, 2),
-            round((1 - $y / 100) * 255, 2)
+            round((1 - $y / 100) * 255, 2),
         ];
     }
 
     /**
      * Convert CMYK color values to CMY.
+     *
      * @param int|float $c The cyan value. (0, 100)
      * @param int|float $m The magenta value. (0, 100)
      * @param int|float $y The yellow value. (0, 100)
@@ -70,12 +73,13 @@ trait ConversionTrait
         return [
             round(($c / 100 * (1 - $k) + $k) * 100, 2),
             round(($m / 100 * (1 - $k) + $k) * 100, 2),
-            round(($y / 100 * (1 - $k) + $k) * 100, 2)
+            round(($y / 100 * (1 - $k) + $k) * 100, 2),
         ];
     }
 
     /**
      * Convert HSL color values to RGB.
+     *
      * @param int|float $h The hue value. (0, 360)
      * @param int|float $s The saturation value. (0, 100)
      * @param int|float $l The lightness value. (0, 100)
@@ -106,12 +110,13 @@ trait ConversionTrait
         return [
             round($r * 255, 2),
             round($g * 255, 2),
-            round($b * 255, 2)
+            round($b * 255, 2),
         ];
     }
 
     /**
      * Convert HSV color values to RGB.
+     *
      * @param int|float $h The hue value. (0, 360)
      * @param int|float $s The saturation value. (0, 100)
      * @param int|float $v The brightness value (0, 100)
@@ -125,7 +130,7 @@ trait ConversionTrait
             return [
                 round($v * 255, 2),
                 round($v * 255, 2),
-                round($v * 255, 2)
+                round($v * 255, 2),
             ];
         }
 
@@ -173,12 +178,13 @@ trait ConversionTrait
         return [
             round($r * 255, 2),
             round($g * 255, 2),
-            round($b * 255, 2)
+            round($b * 255, 2),
         ];
     }
 
     /**
      * Convert RGB color values to CMY.
+     *
      * @param int|float $r The red value. (0, 255)
      * @param int|float $g The green value. (0, 255)
      * @param int|float $b The blue value. (0, 255)
@@ -189,12 +195,13 @@ trait ConversionTrait
         return [
             round((1 - ($r / 255)) * 100, 2),
             round((1 - ($g / 255)) * 100, 2),
-            round((1 - ($b / 255)) * 100, 2)
+            round((1 - ($b / 255)) * 100, 2),
         ];
     }
 
     /**
      * Convert RGB color values to HSL.
+     *
      * @param int|float $r The red value. (0, 255)
      * @param int|float $g The green value. (0, 255)
      * @param int|float $b The blue value. (0, 255)
@@ -215,7 +222,7 @@ trait ConversionTrait
             return [
                 0,
                 0,
-                round($l * 100, 2)
+                round($l * 100, 2),
             ];
         }
 
@@ -242,12 +249,13 @@ trait ConversionTrait
         return [
             round($h * 360, 2),
             round($s * 100, 2),
-            round($l * 100, 2)
+            round($l * 100, 2),
         ];
     }
 
     /**
      * Convert RGB color values to HSV.
+     *
      * @param int|float $r The red value. (0, 255)
      * @param int|float $g The green value. (0, 255)
      * @param int|float $b The blue value. (0, 255)
@@ -268,7 +276,7 @@ trait ConversionTrait
             return [
                 0,
                 0,
-                round($v * 100, 2)
+                round($v * 100, 2),
             ];
         }
 
@@ -290,12 +298,13 @@ trait ConversionTrait
         return [
             round($h * 360, 2),
             round($s * 100, 2),
-            round($v * 100, 2)
+            round($v * 100, 2),
         ];
     }
 
     /**
      * Calculate the relative luminance of an RGB color.
+     *
      * @param int|float $r The red value. (0, 255)
      * @param int|float $g The green value. (0, 255)
      * @param int|float $b The blue value. (0, 255)
@@ -312,6 +321,7 @@ trait ConversionTrait
 
     /**
      * Calculate the R, G or B value of a hue.
+     *
      * @param int|float $v1 The first value.
      * @param int|float $v2 The second value.
      * @param int|float $vH The hue value.
@@ -338,6 +348,7 @@ trait ConversionTrait
 
     /**
      * Calculate the relative R, G or B value for luma calculation.
+     *
      * @param int|float $v The value.
      * @return int|float The R, G or B value.
      */

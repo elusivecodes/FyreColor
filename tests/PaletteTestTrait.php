@@ -23,7 +23,7 @@ trait PaletteTestTrait
                     '#1d3a1d',
                     '#172e17',
                     '#112311',
-                    '#0c170c'
+                    '#0c170c',
                 ],
                 'tints' => [
                     '#408040',
@@ -35,7 +35,7 @@ trait PaletteTestTrait
                     '#a8c5a8',
                     '#b9d1b9',
                     '#cbdccb',
-                    '#dce8dc'
+                    '#dce8dc',
                 ],
                 'tones' => [
                     '#408040',
@@ -47,8 +47,8 @@ trait PaletteTestTrait
                     '#638063',
                     '#688068',
                     '#6e806e',
-                    '#748074'
-                ]
+                    '#748074',
+                ],
             ],
             array_map(
                 fn(array $palette): array => array_map(
@@ -69,10 +69,10 @@ trait PaletteTestTrait
                     '#356a35',
                     '#2b552b',
                     '#204020',
-                    '#152b15'
+                    '#152b15',
                 ],
                 'tints' => [],
-                'tones' => []
+                'tones' => [],
             ],
             array_map(
                 fn(array $palette): array => array_map(
@@ -94,9 +94,9 @@ trait PaletteTestTrait
                     '#609560',
                     '#80aa80',
                     '#9fbf9f',
-                    '#bfd5bf'
+                    '#bfd5bf',
                 ],
-                'tones' => []
+                'tones' => [],
             ],
             array_map(
                 fn(array $palette): array => array_map(
@@ -119,8 +119,8 @@ trait PaletteTestTrait
                     '#4a804a',
                     '#558055',
                     '#608060',
-                    '#6a806a'
-                ]
+                    '#6a806a',
+                ],
             ],
             array_map(
                 fn(array $palette): array => array_map(
@@ -145,7 +145,7 @@ trait PaletteTestTrait
                 '#1d3a1d',
                 '#172e17',
                 '#112311',
-                '#0c170c'
+                '#0c170c',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -162,7 +162,7 @@ trait PaletteTestTrait
                 '#356a35',
                 '#2b552b',
                 '#204020',
-                '#152b15'
+                '#152b15',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -184,7 +184,7 @@ trait PaletteTestTrait
                 '#a8c5a8',
                 '#b9d1b9',
                 '#cbdccb',
-                '#dce8dc'
+                '#dce8dc',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -201,7 +201,7 @@ trait PaletteTestTrait
                 '#609560',
                 '#80aa80',
                 '#9fbf9f',
-                '#bfd5bf'
+                '#bfd5bf',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -223,7 +223,7 @@ trait PaletteTestTrait
                 '#638063',
                 '#688068',
                 '#6e806e',
-                '#748074'
+                '#748074',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,
@@ -240,7 +240,7 @@ trait PaletteTestTrait
                 '#4a804a',
                 '#558055',
                 '#608060',
-                '#6a806a'
+                '#6a806a',
             ],
             array_map(
                 fn(Color $color): string => (string) $color,

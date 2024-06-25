@@ -13,6 +13,7 @@ trait UtilityTrait
 {
     /**
      * Get the hex string of the Colour.
+     *
      * @return string The hex string.
      */
     protected function getHex(): string
@@ -30,6 +31,7 @@ trait UtilityTrait
 
     /**
      * Get the HSL values of the Colour.
+     *
      * @return array The HSL values.
      */
     protected function getHSL(): array
@@ -39,6 +41,7 @@ trait UtilityTrait
 
     /**
      * Get the HSV values of the Colour.
+     *
      * @return array The HSV values.
      */
     protected function getHSV(): array

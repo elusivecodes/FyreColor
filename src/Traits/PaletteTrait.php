@@ -16,6 +16,7 @@ trait PaletteTrait
 {
     /**
      * Create a palette object with a specified number of shades, tints and tone variations.
+     *
      * @param int $shades The number of shades to generate.
      * @param int $tints The number of tints to generate.
      * @param int $tones The number of tones to generate.
@@ -26,12 +27,13 @@ trait PaletteTrait
         return [
             'shades' => $this->shades($shades),
             'tints' => $this->tints($tints),
-            'tones' => $this->tones($tones)
+            'tones' => $this->tones($tones),
         ];
     }
 
     /**
      * Create an array with a specified number of shade variations.
+     *
      * @param int $shades The number of shades to generate.
      * @return array An array containing shade variations.
      */
@@ -45,6 +47,7 @@ trait PaletteTrait
 
     /**
      * Create an array with a specified number of tint variations.
+     *
      * @param int $tints The number of tints to generate.
      * @return array An array containing tint variations.
      */
@@ -58,6 +61,7 @@ trait PaletteTrait
 
     /**
      * Create an array with a specified number of tone variations.
+     *
      * @param int $tones The number of tones to generate.
      * @return array An array containing tone variations.
      */

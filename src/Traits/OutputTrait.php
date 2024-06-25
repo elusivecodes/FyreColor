@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Fyre\Color\Traits;
 
 use function array_search;
-
 use function round;
 
 use const PHP_INT_MAX;
@@ -16,6 +15,7 @@ trait OutputTrait
 {
     /**
      * Return a HTML string representation of the color.
+     *
      * @return string The HTML color string.
      */
     public function __toString(): string
@@ -25,6 +25,7 @@ trait OutputTrait
 
     /**
      * Get the closest color name for the color.
+     *
      * @return string The name.
      */
     public function label(): string
@@ -46,6 +47,7 @@ trait OutputTrait
 
     /**
      * Return a hexadecimal string representation of the color.
+     *
      * @return $string The hexadecimal string.
      */
     public function toHexString(): string
@@ -57,6 +59,7 @@ trait OutputTrait
 
     /**
      * Return a HSL/HSLA string representation of the color.
+     *
      * @return string The HSL/HSLA string.
      */
     public function toHSLString(): string
@@ -77,6 +80,7 @@ trait OutputTrait
 
     /**
      * Return a RGB/RGBA string representation of the color.
+     *
      * @return string The RGB/RGBA string.
      */
     public function toRGBString(): string
@@ -95,6 +99,7 @@ trait OutputTrait
 
     /**
      * Return a HTML string representation of the color.
+     *
      * @return string The HTML color string.
      */
     public function toString(): string

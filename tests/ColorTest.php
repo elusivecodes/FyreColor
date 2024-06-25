@@ -14,5 +14,4 @@ final class ColorTest extends TestCase
     use PaletteTestTrait;
     use SchemesTestTrait;
     use StaticTestTrait;
-
 }

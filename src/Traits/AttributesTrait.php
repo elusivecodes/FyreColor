@@ -10,6 +10,7 @@ trait AttributesTrait
 {
     /**
      * Get the alpha value of the color.
+     *
      * @return int|float The alpha value. (0, 1)
      */
     public function getAlpha(): float|int
@@ -19,6 +20,7 @@ trait AttributesTrait
 
     /**
      * Get the brightness value of the color.
+     *
      * @return int|float The brightness value. (0, 100)
      */
     public function getBrightness(): float|int
@@ -28,6 +30,7 @@ trait AttributesTrait
 
     /**
      * Get the hue value of the color.
+     *
      * @return int|float The hue value. (0, 360)
      */
     public function getHue(): float|int
@@ -37,6 +40,7 @@ trait AttributesTrait
 
     /**
      * Get the saturation value of the color.
+     *
      * @return int|float The saturation value. (0, 100)
      */
     public function getSaturation(): float|int
@@ -46,6 +50,7 @@ trait AttributesTrait
 
     /**
      * Get the relative luminance value of the color
+     *
      * @return float The relative luminance value. (0, 1)
      */
     public function luma(): float
@@ -55,6 +60,7 @@ trait AttributesTrait
 
     /**
      * Set the alpha value of the color.
+     *
      * @param int|float $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
@@ -65,6 +71,7 @@ trait AttributesTrait
 
     /**
      * Set the brightness value of the color.
+     *
      * @param int|float $v The brightness value. (0, 100)
      * @return Color A new Color.
      */
@@ -78,6 +85,7 @@ trait AttributesTrait
 
     /**
      * Set the hue value of the color.
+     *
      * @param int|float $h The hue value. (0, 360)
      * @return Color A new Color.
      */
@@ -91,6 +99,7 @@ trait AttributesTrait
 
     /**
      * Set the saturation value of the color.
+     *
      * @param int|float $s The saturation value. (0, 100)
      * @return Color A new Color.
      */

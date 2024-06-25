@@ -19,6 +19,7 @@ trait StaticTrait
 {
     /**
      * Get the contrast value between two colors.
+     *
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
      * @return float The contrast value. (1, 21)
@@ -33,6 +34,7 @@ trait StaticTrait
 
     /**
      * Calculate the distance between two colors.
+     *
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
      * @return float The distance between the colors.
@@ -42,12 +44,13 @@ trait StaticTrait
         return array_reduce([
             $color1->r - $color2->r,
             $color1->g - $color2->g,
-            $color1->b - $color2->b
+            $color1->b - $color2->b,
         ], fn(float $x, float $y) => hypot($x, $y), 0);
     }
 
     /**
      * Find an optimally contrasting color for another color.
+     *
      * @param Color $color1 The first Color.
      * @param Color|null $color2 The second Color.
      * @param int|float $minContrast The minimum contrast.
@@ -77,6 +80,7 @@ trait StaticTrait
 
     /**
      * Create a new Color by mixing two colors together by a specified amount.
+     *
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
      * @param int|float $amount The amount to mix them by. (0, 1)
@@ -94,6 +98,7 @@ trait StaticTrait
 
     /**
      * Create a new Color by multiplying two colors together by a specified amount.
+     *
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
      * @param int|float $amount The amount to multiply them by. (0, 1)
@@ -127,6 +132,7 @@ trait StaticTrait
 
     /**
      * Clamp a value between a min and max.
+     *
      * @param int|float $min The minimum value of the clamped range.
      * @param int|float $max The maximum value of the clamped range.
      * @param int|float $value The value to clamp.
@@ -139,6 +145,7 @@ trait StaticTrait
 
     /**
      * Linear interpolation from one value to another.
+     *
      * @param int|float $amount The amount to interpolate.
      * @param int|float $v1 The starting value.
      * @param int|float $v2 The ending value.
@@ -151,6 +158,7 @@ trait StaticTrait
 
     /**
      * Shorten a hex string (if possible).
+     *
      * @param string $hex The hex string.
      * @return string The hex string.
      */
