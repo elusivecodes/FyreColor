@@ -53,8 +53,8 @@ trait StaticTrait
      *
      * @param Color $color1 The first Color.
      * @param Color|null $color2 The second Color.
-     * @param int|float $minContrast The minimum contrast.
-     * @param int|float $stepSize The step size.
+     * @param float|int $minContrast The minimum contrast.
+     * @param float|int $stepSize The step size.
      * @return Color|null The new Color.
      */
     public static function findContrast(Color $color1, Color|null $color2 = null, float|int $minContrast = 4.5, float|int $stepSize = .01): Color|null
@@ -83,7 +83,7 @@ trait StaticTrait
      *
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
-     * @param int|float $amount The amount to mix them by. (0, 1)
+     * @param float|int $amount The amount to mix them by. (0, 1)
      * @return Color A new Color.
      */
     public static function mix(Color $color1, Color $color2, float|int $amount): static
@@ -101,7 +101,7 @@ trait StaticTrait
      *
      * @param Color $color1 The first Color.
      * @param Color $color2 The second Color.
-     * @param int|float $amount The amount to multiply them by. (0, 1)
+     * @param float|int $amount The amount to multiply them by. (0, 1)
      * @return Color A new Color.
      */
     public static function multiply(Color $color1, Color $color2, float|int $amount): static
@@ -133,9 +133,9 @@ trait StaticTrait
     /**
      * Clamp a value between a min and max.
      *
-     * @param int|float $min The minimum value of the clamped range.
-     * @param int|float $max The maximum value of the clamped range.
-     * @param int|float $value The value to clamp.
+     * @param float|int $min The minimum value of the clamped range.
+     * @param float|int $max The maximum value of the clamped range.
+     * @param float|int $value The value to clamp.
      * @return float The clamped value.
      */
     protected static function clamp(float|int $val, float|int $min = 0, float|int $max = 100): float
@@ -146,9 +146,9 @@ trait StaticTrait
     /**
      * Linear interpolation from one value to another.
      *
-     * @param int|float $amount The amount to interpolate.
-     * @param int|float $v1 The starting value.
-     * @param int|float $v2 The ending value.
+     * @param float|int $amount The amount to interpolate.
+     * @param float|int $v1 The starting value.
+     * @param float|int $v2 The ending value.
      * @return float The interpolated value.
      */
     protected static function lerp(float|int $a, float|int $b, float|int $amount): float

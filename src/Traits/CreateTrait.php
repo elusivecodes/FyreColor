@@ -175,10 +175,10 @@ trait CreateTrait
     /**
      * Create a new Color from CMY values.
      *
-     * @param int|float $c The cyan value. (0, 100)
-     * @param int|float $m The magenta value. (0, 100)
-     * @param int|float $y The yellow value. (0, 100)
-     * @param int|float $a The alpha value. (0, 1)
+     * @param float|int $c The cyan value. (0, 100)
+     * @param float|int $m The magenta value. (0, 100)
+     * @param float|int $y The yellow value. (0, 100)
+     * @param float|int $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
     public static function fromCMY(float|int $c, float|int $m, float|int $y, float|int $a = 1): static
@@ -191,11 +191,11 @@ trait CreateTrait
     /**
      * Create a new Color from CMYK values.
      *
-     * @param int|float $c The cyan value. (0, 100)
-     * @param int|float $m The magenta value. (0, 100)
-     * @param int|float $y The yellow value. (0, 100)
-     * @param int|float $k The key value. (0, 100)
-     * @param int|float $a The alpha value. (0, 1)
+     * @param float|int $c The cyan value. (0, 100)
+     * @param float|int $m The magenta value. (0, 100)
+     * @param float|int $y The yellow value. (0, 100)
+     * @param float|int $k The key value. (0, 100)
+     * @param float|int $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
     public static function fromCMYK(float|int $c, float|int $m, float|int $y, float|int $k, float|int $a = 1): static
@@ -246,10 +246,10 @@ trait CreateTrait
     /**
      * Create a new Color from HSL values.
      *
-     * @param int|float $h The hue value. (0, 360)
-     * @param int|float $s The saturation value. (0, 100)
-     * @param int|float $l The lightness value. (0, 100)
-     * @param int|float $a The alpha value. (0, 1)
+     * @param float|int $h The hue value. (0, 360)
+     * @param float|int $s The saturation value. (0, 100)
+     * @param float|int $l The lightness value. (0, 100)
+     * @param float|int $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
     public static function fromHSL(float|int $h, float|int $s, float|int $l, float|int $a = 1): static
@@ -293,10 +293,10 @@ trait CreateTrait
     /**
      * Create a new Color from HSV values.
      *
-     * @param int|float $h The hue value. (0, 360)
-     * @param int|float $s The saturation value. (0, 100)
-     * @param int|float $v The brightness value. (0, 100)
-     * @param int|float $a The alpha value. (0, 1)
+     * @param float|int $h The hue value. (0, 360)
+     * @param float|int $s The saturation value. (0, 100)
+     * @param float|int $v The brightness value. (0, 100)
+     * @param float|int $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
     public static function fromHSV(float|int $h, float|int $s, float|int $v, float|int $a = 1): static
@@ -309,10 +309,10 @@ trait CreateTrait
     /**
      * Create a new Color from RGB values.
      *
-     * @param int|float $r The red value. (0, 255)
-     * @param int|float $g The green value. (0, 255)
-     * @param int|float $b The blue value. (0, 255)
-     * @param int|float $a The alpha value. (0, 1)
+     * @param float|int $r The red value. (0, 255)
+     * @param float|int $g The green value. (0, 255)
+     * @param float|int $b The blue value. (0, 255)
+     * @param float|int $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
     public static function fromRGB(float|int $r, float|int $g, float|int $b, float|int $a = 1): static

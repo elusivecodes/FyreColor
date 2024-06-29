@@ -41,10 +41,10 @@ class Color
     /**
      * New Color constructor.
      *
-     * @param int|float $r The red value, or the brightness value.
-     * @param int|float $g The green value or the alpha value.
-     * @param int|float $a The alpha value.
-     * @param int|float|null $g The blue value.
+     * @param float|int $r The red value, or the brightness value.
+     * @param float|int $g The green value or the alpha value.
+     * @param float|int $a The alpha value.
+     * @param float|int|null $g The blue value.
      */
     public function __construct(float|int $r = 0, float|int $g = 1, float|int|null $b = null, float|int $a = 1)
     {

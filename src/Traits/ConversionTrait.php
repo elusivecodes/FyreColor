@@ -17,9 +17,9 @@ trait ConversionTrait
     /**
      * Convert CMY color values to CMYK.
      *
-     * @param int|float $c The cyan value. (0, 100)
-     * @param int|float $m The magenta value. (0, 100)
-     * @param int|float $y The yellow value. (0, 100)
+     * @param float|int $c The cyan value. (0, 100)
+     * @param float|int $m The magenta value. (0, 100)
+     * @param float|int $y The yellow value. (0, 100)
      * @return array An array containing the CMYK values.
      */
     protected static function CMY2CMYK(float|int $c, float|int $m, float|int $y): array
@@ -43,9 +43,9 @@ trait ConversionTrait
     /**
      * Convert CMY color values to RGB.
      *
-     * @param int|float $c The cyan value. (0, 100)
-     * @param int|float $m The magenta value. (0, 100)
-     * @param int|float $y The yellow value. (0, 100)
+     * @param float|int $c The cyan value. (0, 100)
+     * @param float|int $m The magenta value. (0, 100)
+     * @param float|int $y The yellow value. (0, 100)
      * @return array An array containing the RGB values.
      */
     protected static function CMY2RGB(float|int $c, float|int $m, float|int $y): array
@@ -60,10 +60,10 @@ trait ConversionTrait
     /**
      * Convert CMYK color values to CMY.
      *
-     * @param int|float $c The cyan value. (0, 100)
-     * @param int|float $m The magenta value. (0, 100)
-     * @param int|float $y The yellow value. (0, 100)
-     * @param int|float $k The key value. (0, 100)
+     * @param float|int $c The cyan value. (0, 100)
+     * @param float|int $m The magenta value. (0, 100)
+     * @param float|int $y The yellow value. (0, 100)
+     * @param float|int $k The key value. (0, 100)
      * @return array An array containing the CMY values.
      */
     protected static function CMYK2CMY(float|int $c, float|int $m, float|int $y, float|int $k): array
@@ -80,9 +80,9 @@ trait ConversionTrait
     /**
      * Convert HSL color values to RGB.
      *
-     * @param int|float $h The hue value. (0, 360)
-     * @param int|float $s The saturation value. (0, 100)
-     * @param int|float $l The lightness value. (0, 100)
+     * @param float|int $h The hue value. (0, 360)
+     * @param float|int $s The saturation value. (0, 100)
+     * @param float|int $l The lightness value. (0, 100)
      * @return array An array containing the RGB values.
      */
     protected static function HSL2RGB(float|int $h, float|int $s, float|int $l): array
@@ -117,9 +117,9 @@ trait ConversionTrait
     /**
      * Convert HSV color values to RGB.
      *
-     * @param int|float $h The hue value. (0, 360)
-     * @param int|float $s The saturation value. (0, 100)
-     * @param int|float $v The brightness value (0, 100)
+     * @param float|int $h The hue value. (0, 360)
+     * @param float|int $s The saturation value. (0, 100)
+     * @param float|int $v The brightness value (0, 100)
      * @return array An array containing the RGB values.
      */
     protected static function HSV2RGB(float|int $h, float|int $s, float|int $v): array
@@ -185,9 +185,9 @@ trait ConversionTrait
     /**
      * Convert RGB color values to CMY.
      *
-     * @param int|float $r The red value. (0, 255)
-     * @param int|float $g The green value. (0, 255)
-     * @param int|float $b The blue value. (0, 255)
+     * @param float|int $r The red value. (0, 255)
+     * @param float|int $g The green value. (0, 255)
+     * @param float|int $b The blue value. (0, 255)
      * @return array An array containing the CMY values.
      */
     protected static function RGB2CMY(float|int $r, float|int $g, float|int $b): array
@@ -202,9 +202,9 @@ trait ConversionTrait
     /**
      * Convert RGB color values to HSL.
      *
-     * @param int|float $r The red value. (0, 255)
-     * @param int|float $g The green value. (0, 255)
-     * @param int|float $b The blue value. (0, 255)
+     * @param float|int $r The red value. (0, 255)
+     * @param float|int $g The green value. (0, 255)
+     * @param float|int $b The blue value. (0, 255)
      * @return array An array containing the HSL values.
      */
     protected static function RGB2HSL(float|int $r, float|int $g, float|int $b): array
@@ -256,9 +256,9 @@ trait ConversionTrait
     /**
      * Convert RGB color values to HSV.
      *
-     * @param int|float $r The red value. (0, 255)
-     * @param int|float $g The green value. (0, 255)
-     * @param int|float $b The blue value. (0, 255)
+     * @param float|int $r The red value. (0, 255)
+     * @param float|int $g The green value. (0, 255)
+     * @param float|int $b The blue value. (0, 255)
      * @return array An array containing the HSV values.
      */
     protected static function RGB2HSV(float|int $r, float|int $g, float|int $b): array
@@ -305,9 +305,9 @@ trait ConversionTrait
     /**
      * Calculate the relative luminance of an RGB color.
      *
-     * @param int|float $r The red value. (0, 255)
-     * @param int|float $g The green value. (0, 255)
-     * @param int|float $b The blue value. (0, 255)
+     * @param float|int $r The red value. (0, 255)
+     * @param float|int $g The green value. (0, 255)
+     * @param float|int $b The blue value. (0, 255)
      * @return float The relative luminance value.
      */
     protected static function RGB2Luma(float|int $r, float|int $g, float|int $b): float
@@ -322,10 +322,10 @@ trait ConversionTrait
     /**
      * Calculate the R, G or B value of a hue.
      *
-     * @param int|float $v1 The first value.
-     * @param int|float $v2 The second value.
-     * @param int|float $vH The hue value.
-     * @return int|float The R, G or B value.
+     * @param float|int $v1 The first value.
+     * @param float|int $v2 The second value.
+     * @param float|int $vH The hue value.
+     * @return float|int The R, G or B value.
      */
     protected static function RGBHue(float|int $v1, float|int $v2, float|int $vH): float|int
     {
@@ -349,8 +349,8 @@ trait ConversionTrait
     /**
      * Calculate the relative R, G or B value for luma calculation.
      *
-     * @param int|float $v The value.
-     * @return int|float The R, G or B value.
+     * @param float|int $v The value.
+     * @return float|int The R, G or B value.
      */
     protected static function RGBLumaValue(float|int $v): float|int
     {

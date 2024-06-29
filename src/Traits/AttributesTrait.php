@@ -11,7 +11,7 @@ trait AttributesTrait
     /**
      * Get the alpha value of the color.
      *
-     * @return int|float The alpha value. (0, 1)
+     * @return float|int The alpha value. (0, 1)
      */
     public function getAlpha(): float|int
     {
@@ -21,7 +21,7 @@ trait AttributesTrait
     /**
      * Get the brightness value of the color.
      *
-     * @return int|float The brightness value. (0, 100)
+     * @return float|int The brightness value. (0, 100)
      */
     public function getBrightness(): float|int
     {
@@ -31,7 +31,7 @@ trait AttributesTrait
     /**
      * Get the hue value of the color.
      *
-     * @return int|float The hue value. (0, 360)
+     * @return float|int The hue value. (0, 360)
      */
     public function getHue(): float|int
     {
@@ -41,7 +41,7 @@ trait AttributesTrait
     /**
      * Get the saturation value of the color.
      *
-     * @return int|float The saturation value. (0, 100)
+     * @return float|int The saturation value. (0, 100)
      */
     public function getSaturation(): float|int
     {
@@ -61,7 +61,7 @@ trait AttributesTrait
     /**
      * Set the alpha value of the color.
      *
-     * @param int|float $a The alpha value. (0, 1)
+     * @param float|int $a The alpha value. (0, 1)
      * @return Color A new Color.
      */
     public function setAlpha(float|int $a): static
@@ -72,7 +72,7 @@ trait AttributesTrait
     /**
      * Set the brightness value of the color.
      *
-     * @param int|float $v The brightness value. (0, 100)
+     * @param float|int $v The brightness value. (0, 100)
      * @return Color A new Color.
      */
     public function setBrightness(float|int $v): static
@@ -86,7 +86,7 @@ trait AttributesTrait
     /**
      * Set the hue value of the color.
      *
-     * @param int|float $h The hue value. (0, 360)
+     * @param float|int $h The hue value. (0, 360)
      * @return Color A new Color.
      */
     public function setHue(float|int $h): static
@@ -100,7 +100,7 @@ trait AttributesTrait
     /**
      * Set the saturation value of the color.
      *
-     * @param int|float $s The saturation value. (0, 100)
+     * @param float|int $s The saturation value. (0, 100)
      * @return Color A new Color.
      */
     public function setSaturation(float|int $s): static
