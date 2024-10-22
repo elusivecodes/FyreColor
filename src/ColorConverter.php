@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Fyre\Color\Traits;
+namespace Fyre\Color;
 
 use function floor;
 use function fmod;
@@ -10,10 +10,30 @@ use function min;
 use function round;
 
 /**
- * ConversionTrait
+ * ColorConverter
  */
-trait ConversionTrait
+abstract class ColorConverter
 {
+    /**
+     * Convert CMYK color values to CMY.
+     *
+     * @param float|int $c The cyan value. (0, 100)
+     * @param float|int $m The magenta value. (0, 100)
+     * @param float|int $y The yellow value. (0, 100)
+     * @param float|int $k The key value. (0, 100)
+     * @return array An array containing the CMY values.
+     */
+    public static function CMYKToCMY(float|int $c, float|int $m, float|int $y, float|int $k): array
+    {
+        $k /= 100;
+
+        return [
+            round(($c / 100 * (1 - $k) + $k) * 100, 2),
+            round(($m / 100 * (1 - $k) + $k) * 100, 2),
+            round(($y / 100 * (1 - $k) + $k) * 100, 2),
+        ];
+    }
+
     /**
      * Convert CMY color values to CMYK.
      *
@@ -22,7 +42,7 @@ trait ConversionTrait
      * @param float|int $y The yellow value. (0, 100)
      * @return array An array containing the CMYK values.
      */
-    protected static function CMY2CMYK(float|int $c, float|int $m, float|int $y): array
+    public static function CMYToCMYK(float|int $c, float|int $m, float|int $y): array
     {
         $k = min($c, $m, $y);
 
@@ -35,8 +55,11 @@ trait ConversionTrait
         return [
             round(($c / 100 - $k) / (1 - $k) * 100, 2),
             round(($m / 100 - $k) / (1 - $k) * 100, 2),
-            round(($y / 100 - $k) / (1 - $k) * 100, 2),
-            round($k * 100, 2),
+            round(($y / 100 - $k) / (
+                1 - $k) * 100, 2),
+            round($k * 100,
+                2
+            ),
         ];
     }
 
@@ -48,32 +71,12 @@ trait ConversionTrait
      * @param float|int $y The yellow value. (0, 100)
      * @return array An array containing the RGB values.
      */
-    protected static function CMY2RGB(float|int $c, float|int $m, float|int $y): array
+    public static function CMYToRGB(float|int $c, float|int $m, float|int $y): array
     {
         return [
             round((1 - $c / 100) * 255, 2),
             round((1 - $m / 100) * 255, 2),
             round((1 - $y / 100) * 255, 2),
-        ];
-    }
-
-    /**
-     * Convert CMYK color values to CMY.
-     *
-     * @param float|int $c The cyan value. (0, 100)
-     * @param float|int $m The magenta value. (0, 100)
-     * @param float|int $y The yellow value. (0, 100)
-     * @param float|int $k The key value. (0, 100)
-     * @return array An array containing the CMY values.
-     */
-    protected static function CMYK2CMY(float|int $c, float|int $m, float|int $y, float|int $k): array
-    {
-        $k /= 100;
-
-        return [
-            round(($c / 100 * (1 - $k) + $k) * 100, 2),
-            round(($m / 100 * (1 - $k) + $k) * 100, 2),
-            round(($y / 100 * (1 - $k) + $k) * 100, 2),
         ];
     }
 
@@ -85,7 +88,7 @@ trait ConversionTrait
      * @param float|int $l The lightness value. (0, 100)
      * @return array An array containing the RGB values.
      */
-    protected static function HSL2RGB(float|int $h, float|int $s, float|int $l): array
+    public static function HSLToRGB(float|int $h, float|int $s, float|int $l): array
     {
         if (!$l) {
             return [0, 0, 0];
@@ -122,7 +125,7 @@ trait ConversionTrait
      * @param float|int $v The brightness value (0, 100)
      * @return array An array containing the RGB values.
      */
-    protected static function HSV2RGB(float|int $h, float|int $s, float|int $v): array
+    public static function HSVToRGB(float|int $h, float|int $s, float|int $v): array
     {
         $v /= 100;
 
@@ -190,7 +193,7 @@ trait ConversionTrait
      * @param float|int $b The blue value. (0, 255)
      * @return array An array containing the CMY values.
      */
-    protected static function RGB2CMY(float|int $r, float|int $g, float|int $b): array
+    public static function RGBToCMY(float|int $r, float|int $g, float|int $b): array
     {
         return [
             round((1 - ($r / 255)) * 100, 2),
@@ -207,7 +210,7 @@ trait ConversionTrait
      * @param float|int $b The blue value. (0, 255)
      * @return array An array containing the HSL values.
      */
-    protected static function RGB2HSL(float|int $r, float|int $g, float|int $b): array
+    public static function RGBToHSL(float|int $r, float|int $g, float|int $b): array
     {
         $r /= 255;
         $g /= 255;
@@ -261,7 +264,7 @@ trait ConversionTrait
      * @param float|int $b The blue value. (0, 255)
      * @return array An array containing the HSV values.
      */
-    protected static function RGB2HSV(float|int $r, float|int $g, float|int $b): array
+    public static function RGBToHSV(float|int $r, float|int $g, float|int $b): array
     {
         $r /= 255;
         $g /= 255;
@@ -310,7 +313,7 @@ trait ConversionTrait
      * @param float|int $b The blue value. (0, 255)
      * @return float The relative luminance value.
      */
-    protected static function RGB2Luma(float|int $r, float|int $g, float|int $b): float
+    public static function RGBToLuma(float|int $r, float|int $g, float|int $b): float
     {
         $r = static::RGBLumaValue($r);
         $g = static::RGBLumaValue($g);
