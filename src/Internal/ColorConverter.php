@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Fyre\Color;
+namespace Fyre\Color\Internal;
 
 use function floor;
 use function fmod;
@@ -56,8 +56,10 @@ abstract class ColorConverter
             round(($c / 100 - $k) / (1 - $k) * 100, 2),
             round(($m / 100 - $k) / (1 - $k) * 100, 2),
             round(($y / 100 - $k) / (
-                1 - $k) * 100, 2),
-            round($k * 100,
+                1 - $k
+            ) * 100, 2),
+            round(
+                $k * 100,
                 2
             ),
         ];
