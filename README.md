@@ -127,11 +127,11 @@ $color = Color::fromHSV($hue, $saturation, $value, $alpha);
 
 Get a HTML string representation of the color.
 
-The `$colorString` returned will be a string containing either a HTML color name (if one exists), a hexadecimal string (if alpha is *1*) or an RGBA string.
-
 ```php
 $colorString = $color->toString();
 ```
+
+The `$colorString` returned will be a string containing either a HTML color name (if one exists), a hexadecimal string (if alpha is *1*) or an RGBA string.
 
 **To Hex String**
 
