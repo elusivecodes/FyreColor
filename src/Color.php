@@ -541,7 +541,7 @@ class Color
     }
 
     /**
-     * Return a HTML string representation of the color.
+     * Get a HTML string representation of the color.
      *
      * @return string The HTML color string.
      */
@@ -868,7 +868,7 @@ class Color
     }
 
     /**
-     * Return a hexadecimal string representation of the color.
+     * Get a hexadecimal string representation of the color.
      *
      * @return $string The hexadecimal string.
      */
@@ -880,7 +880,7 @@ class Color
     }
 
     /**
-     * Return a HSL/HSLA string representation of the color.
+     * Get a HSL/HSLA string representation of the color.
      *
      * @return string The HSL/HSLA string.
      */
@@ -933,7 +933,7 @@ class Color
     }
 
     /**
-     * Return a RGB/RGBA string representation of the color.
+     * Get a RGB/RGBA string representation of the color.
      *
      * @return string The RGB/RGBA string.
      */
@@ -952,7 +952,7 @@ class Color
     }
 
     /**
-     * Return a HTML string representation of the color.
+     * Get a HTML string representation of the color.
      *
      * @return string The HTML color string.
      */

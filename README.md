@@ -125,7 +125,7 @@ $color = Color::fromHSV($hue, $saturation, $value, $alpha);
 
 **To String**
 
-Return a HTML string representation of the color.
+Get a HTML string representation of the color.
 
 The `$colorString` returned will be a string containing either a HTML color name (if one exists), a hexadecimal string (if alpha is *1*) or an RGBA string.
 
@@ -135,7 +135,7 @@ $colorString = $color->toString();
 
 **To Hex String**
 
-Return a hexadecimal string representation of the color.
+Get a hexadecimal string representation of the color.
 
 ```php
 $hexString = $color->toHexString();
@@ -143,7 +143,7 @@ $hexString = $color->toHexString();
 
 **To RGB String**
 
-Return a RGB/RGBA string representation of the color.
+Get a RGB/RGBA string representation of the color.
 
 ```php
 $rgbString = $color->toRGBString();
@@ -151,7 +151,7 @@ $rgbString = $color->toRGBString();
 
 **To HSL String**
 
-Return a HSL/HSLA string representation of the color.
+Get a HSL/HSLA string representation of the color.
 
 ```php
 $hslString = $color->toHSLString();
