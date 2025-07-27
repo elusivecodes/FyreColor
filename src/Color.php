@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Fyre\Color;
 
 use Fyre\Color\Internal\ColorConverter;
+use Fyre\Utility\Traits\MacroTrait;
 use RuntimeException;
 
 use function array_fill;
@@ -32,6 +33,8 @@ use const PHP_INT_MAX;
  */
 class Color
 {
+    use MacroTrait;
+
     protected const COLORS = [
         'aliceblue' => '#f0f8ff',
         'antiquewhite' => '#faebd7',
