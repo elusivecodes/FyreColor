@@ -2,19 +2,31 @@
 
 **FyreColor** is a free, open-source immutable color manipulation library for *PHP*.
 
-It is a modern library, and features full support for RGB, HSL, HSV, CMY and CMYK color-spaces.
+It is a modern library, and features full support for all CSS color-spaces.
 
 
 ## Table Of Contents
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Color Creation](#color-creation)
-- [Color Formatting](#color-formatting)
-- [Color Attributes](#color-attributes)
-- [Color Manipulation](#color-manipulation)
-- [Color Schemes](#color-schemes)
-- [Color Palettes](#color-palettes)
-- [Static Methods](#static-methods)
+- [Colors](#colors)
+    - [A98 Rgb](#a98-rgb)
+    - [Display P3](#display-p3)
+    - [Display P3 Linear](#display-p3-linear)
+    - [Hex](#hex)
+    - [Hsl](#hsl)
+    - [Hwb](#hwb)
+    - [Lab](#lab)
+    - [Lch](#lch)
+    - [OkLab](#oklab)
+    - [OkLch](#oklch)
+    - [ProPhoto Rgb](#prophoto-rgb)
+    - [Rec2020](#rec2020)
+    - [Rgb](#rgb)
+    - [Srgb](#srgb)
+    - [Srgb Linear](#srgb-linear)
+    - [Xyz D50](#xyz-d50)
+    - [Xyz D65](#xyz-d65)
 
 
 
@@ -35,432 +47,1465 @@ use Fyre\Color\Color;
 
 ## Basic Usage
 
-**From RGB**
-
-- `$red` is a number between *0* and *255*.
-- `$green` is a number between *0* and *255*.
-- `$blue` is a number between *0* and *255*.
-- `$alpha` is a number between *0* and *1*, and will default to *1*.
+- `$string` is a string representing the CSS color.
 
 ```php
-$color = new Color($red, $green, $blue, $alpha);
+$color = Color::createFromString($string);
 ```
 
-**From Brightness**
-
-- `$brightness` is a number between *0* and *100*.
-- `$alpha` is a number between *0* and *1*, and will default to *1*.
-
-```php
-$color = new Color($brightness, $alpha);
-```
 
 ## Color Creation
 
-**From String**
+**Create From A98 RGB**
 
-Create a new *Color* from a HTML color string.
-
-- `$colorString` is a string containing a color value in either hexadecimal, RGB, RGBA, HSL, HSLA or a standard HTML color name.
-
-```php
-$color = Color::fromString($colorString);
-```
-
-**From CMY**
-
-Create a new *Color* from CMY values.
-
-- `$cyan` is a number between *0* and *100*.
-- `$magenta` is a number between *0* and *100*.
-- `$yellow` is a number between *0* and *100*.
+- `$red` is a number between *0* and *1*, and will default to *0*.
+- `$green` is a number between *0* and *1*, and will default to *0*.
+- `$blue` is a number between *0* and *1*, and will default to *0*.
 - `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$color = Color::fromCMY($cyan, $magenta, $yellow, $alpha);
+$color = Color::createFromA98Rgb($red, $green, $blue, $alpha);
 ```
 
-**From CMYK**
+**Create From Display P3**
 
-Create a new *Color* from CMYK values.
-
-- `$cyan` is a number between *0* and *100*.
-- `$magenta` is a number between *0* and *100*.
-- `$yellow` is a number between *0* and *100*.
-- `$key` is a number between *0* and *100*.
+- `$red` is a number between *0* and *1*, and will default to *0*.
+- `$green` is a number between *0* and *1*, and will default to *0*.
+- `$blue` is a number between *0* and *1*, and will default to *0*.
 - `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$color = Color::fromCMYK($cyan, $magenta, $yellow, $key, $alpha);
+$color = Color::createFromDisplayP3($red, $green, $blue, $alpha);
 ```
 
-**From HSL**
+**Create From Display P3 Linear**
 
-Create a new *Color* from HSL values.
-
-- `$hue` is a number between *0* and *360*.
-- `$saturation` is a number between *0* and *100*.
-- `$lightness` is a number between *0* and *100*.
+- `$red` is a number between *0* and *1*, and will default to *0*.
+- `$green` is a number between *0* and *1*, and will default to *0*.
+- `$blue` is a number between *0* and *1*, and will default to *0*.
 - `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$color = Color::fromHSL($hue, $saturation, $lightness, $alpha);
+$color = Color::createFromDisplayP3Linear($red, $green, $blue, $alpha);
 ```
 
-**From HSV**
+**Create From HSL**
 
-Create a new *Color* from HSV values.
-
-- `$hue` is a number between *0* and *360*.
-- `$saturation` is a number between *0* and *100*.
-- `$value` is a number between *0* and *100*.
+- `$hue` is a number between *0* and *360*, and will default to *0*.
+- `$saturation` is a number between *0* and *100*, and will default to *0*.
+- `$lightness` is a number between *0* and *100*, and will default to *0*.
 - `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$color = Color::fromHSV($hue, $saturation, $value, $alpha);
+$color = Color::createFromHsl($hue, $saturation, $lightness, $alpha);
 ```
 
+**Create From HWB**
 
-## Color Formatting
-
-**To String**
-
-Get a HTML string representation of the color.
+- `$hue` is a number between *0* and *360*, and will default to *0*.
+- `$whiteness` is a number between *0* and *100*, and will default to *0*.
+- `$blackness` is a number between *0* and *100*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$colorString = $color->toString();
+$color = Color::createFromHwb($hue, $whiteness, $blackness, $alpha);
 ```
 
-The `$colorString` returned will be a string containing either a HTML color name (if one exists), a hexadecimal string (if alpha is *1*) or an RGBA string.
+**Create From Lab**
 
-**To Hex String**
-
-Get a hexadecimal string representation of the color.
+- `$lightness` is a number between *0* and *100*, and will default to *0*.
+- `$a` is a number between *-128* and *127*, and will default to *0*.
+- `$b` is a number between *-128* and *127*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$hexString = $color->toHexString();
+$color = Color::createFromLab($lightness, $a, $b, $alpha);
 ```
 
-**To RGB String**
+**Create From Lch**
 
-Get a RGB/RGBA string representation of the color.
+- `$lightness` is a number between *0* and *100*, and will default to *0*.
+- `$chroma` is a number between *0* and *230*, and will default to *0*.
+- `$hue` is a number between *0* and *360*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$rgbString = $color->toRGBString();
+$color = Color::createFromLch($lightness, $chroma, $hue, $alpha);
 ```
 
-**To HSL String**
+**Create From OkLab**
 
-Get a HSL/HSLA string representation of the color.
+- `$lightness` is a number between *0* and *1*, and will default to *0*.
+- `$a` is a number between *-0.4* and *0.4*, and will default to *0*.
+- `$b` is a number between *-0.4* and *0.4*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$hslString = $color->toHSLString();
+$color = Color::createFromOkLab($lightness, $a, $b, $alpha);
 ```
 
-**Label**
+**Create From OkLch**
 
-Get the closest color name for the color.
+- `$lightness` is a number between *0* and *1*, and will default to *0*.
+- `$chroma` is a number between *0* and *0.4*, and will default to *0*.
+- `$hue` is a number between *0* and *360*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
 
 ```php
-$label = $color->label();
+$color = Color::createFromOkLch($lightness, $chroma, $hue, $alpha);
+```
+
+**Create From ProPhoto Rgb**
+
+- `$red` is a number between *0* and *1*, and will default to *0*.
+- `$green` is a number between *0* and *1*, and will default to *0*.
+- `$blue` is a number between *0* and *1*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
+
+```php
+$color = Color::createFromProPhotoRgb($red, $green, $blue, $alpha);
+```
+
+**Create From Rec 2020**
+
+- `$red` is a number between *0* and *1*, and will default to *0*.
+- `$green` is a number between *0* and *1*, and will default to *0*.
+- `$blue` is a number between *0* and *1*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
+
+```php
+$color = Color::createFromRec2020($red, $green, $blue, $alpha);
+```
+
+**Create From Rgb**
+
+- `$red` is a number between *0* and *255*, and will default to *0*.
+- `$green` is a number between *0* and *255*, and will default to *0*.
+- `$blue` is a number between *0* and *255*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
+
+```php
+$color = Color::createFromRgb($red, $green, $blue, $alpha);
+```
+
+**Create From Srgb**
+
+- `$red` is a number between *0* and *1*, and will default to *0*.
+- `$green` is a number between *0* and *1*, and will default to *0*.
+- `$blue` is a number between *0* and *1*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
+
+```php
+$color = Color::createFromSrgb($red, $green, $blue, $alpha);
+```
+
+**Create From Srgb Linear**
+
+- `$red` is a number between *0* and *1*, and will default to *0*.
+- `$green` is a number between *0* and *1*, and will default to *0*.
+- `$blue` is a number between *0* and *1*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
+
+```php
+$color = Color::createFromSrgbLinear($red, $green, $blue, $alpha);
+```
+
+**Create From Xyz D50**
+
+- `$x` is a number between *0* and *1*, and will default to *0*.
+- `$y` is a number between *0* and *1*, and will default to *0*.
+- `$z` is a number between *0* and *1*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
+
+```php
+$color = Color::createFromXyzD50($x, $y, $z, $alpha);
+```
+
+**Create From Xyz D65**
+
+- `$x` is a number between *0* and *1*, and will default to *0*.
+- `$y` is a number between *0* and *1*, and will default to *0*.
+- `$z` is a number between *0* and *1*, and will default to *0*.
+- `$alpha` is a number between *0* and *1*, and will default to *1*.
+
+```php
+$color = Color::createFromXyzD65($x, $y, $z, $alpha);
 ```
 
 
-## Color Attributes
+## Colors
+
+**Contrast**
+
+Calculate the contrast between this and another Color.
+
+- `$other` is a *Color*.
+
+```php
+$contrast = $color->contrast($other);
+```
 
 **Get Alpha**
 
-Get the alpha value of the color (between *0* and *1*).
+Get the alpha value.
 
 ```php
 $alpha = $color->getAlpha();
 ```
 
-**Get Brightness**
+**Label**
 
-Get the brightness value of the color (between *0* and *100*).
-
-```php
-$brightness = $color->getBrightness();
-```
-
-**Get Hue**
-
-Get the hue value of the color (between *0* and *360*).
+Find the closest HTML color name for this color (in current color space).
 
 ```php
-$hue = $color->getHue();
-```
-
-**Get Saturation**
-
-Get the saturation value of the color (between *0* and *100*).
-
-```php
-$saturation = $color->getSaturation();
+$label = $color->label();
 ```
 
 **Luma**
 
-Get the relative luminance value of the color (between *0* and *1*).
+Calculate the relative luminance value.
 
 ```php
 $luma = $color->luma();
 ```
 
-**Set Alpha**
+**Space**
 
-Set the alpha value of the color.
+Get the current color space.
+
+```php
+$space = $color->space();
+```
+
+**To**
+
+Convert the *Color* to a named color space.
+
+- `$space` is a string representing the color space, and must be one of either "*a98-rgb*", "*display-p3*", "*display-p3-linear*", "*hex*", "*hsl*", "hwb**", "*lab*", "*lch*", "*oklab*", "*oklch*", "*prophoto-rgb*", "*rec2020*", "*rgb*", "*srgb*", "*srgb-linear*", "*xyz-d50*" or "*xyz-d65*".
+
+```php
+$newColor = $color->to($space);
+```
+
+**To A98 RGB**
+
+Convert the *Color* to [*A98Rgb*](#a98-rgb).
+
+```php
+$newColor = $color->toA98Rgb();
+```
+
+**To Array**
+
+Get the color components as an array.
+
+```php
+$data = $color->toArray();
+```
+
+**To Display P3**
+
+Convert the *Color* to [*DisplayP3*](#display-p3).
+
+```php
+$newColor = $color->toDisplayP3();
+```
+
+**To Display P3 Linear**
+
+Convert the *Color* to [*DisplayP3Linear*](#display-p3-linear).
+
+```php
+$newColor = $color->toDisplayP3Linear();
+```
+
+**To Hex**
+
+Convert the *Color* to [*Hex*](#hex).
+
+```php
+$newColor = $color->toHex();
+```
+
+**To HSL**
+
+Convert the *Color* to [*Hsl*](#hsl).
+
+```php
+$newColor = $color->toHsl();
+```
+
+**To HWB**
+
+Convert the *Color* to [*Hwb*](#hwb).
+
+```php
+$newColor = $color->toHwb();
+```
+
+**To Lab**
+
+Convert the *Color* to [*Lab*](#lab).
+
+```php
+$newColor = $color->toLab();
+```
+
+**To Lch**
+
+Convert the *Color* to [*Lch*](#lch).
+
+```php
+$newColor = $color->toLch();
+```
+
+**To OkLab**
+
+Convert the *Color* to [*OkLab*](#oklab).
+
+```php
+$newColor = $color->toOkLab();
+```
+
+**To OkLch**
+
+Convert the *Color* to [*OkLch*](#oklch).
+
+```php
+$newColor = $color->toOkLch();
+```
+
+**To ProPhoto Rgb**
+
+Convert the *Color* to [*ProPhotoRgb*](#prophoto-rgb).
+
+```php
+$newColor = $color->toProPhotoRgb();
+```
+
+**To Rec 2020**
+
+Convert the *Color* to [*Rec2020*](#rec2020).
+
+```php
+$newColor = $color->toRec2020();
+```
+
+**To Rgb**
+
+Convert the *Color* to [*Rgb*](#rgb).
+
+```php
+$newColor = $color->toRgb();
+```
+
+**To Srgb**
+
+Convert the *Color* to [*Srgb*](#srgb).
+
+```php
+$newColor = $color->toSrgb();
+```
+
+**To Srgb Linear**
+
+Convert the *Color* to [*SrgbLinear*](#srgb-linear).
+
+```php
+$newColor = $color->toSrgbLinear();
+```
+
+**To String**
+
+Get the CSS color string.
+
+- `$alpha` is a boolean indicating whether to include the alpha component in the string, and will default to *null*.
+- `$precision` is a number representing the decimal precision, and will default to *2*.
+
+```php
+$colorString = $color->toString($alpha, $precision);
+```
+
+**To Xyz D50**
+
+Convert the *Color* to [*XyzD50*](#xyz-d50).
+
+```php
+$newColor = $color->toXyzD50();
+```
+
+**To Xyz D65**
+
+Convert the *Color* to [*XyzD65*](#xyz-d65).
+
+```php
+$newColor = $color->toXyzD65();
+```
+
+**With Alpha**
+
+Clone the *Color* with a new alpha value.
 
 - `$alpha` is a number between *0* and *1*.
 
 ```php
-$newColor = $color->setAlpha($alpha);
+$newColor = $color->withAlpha($alpha);
 ```
 
-**Set Brightness**
 
-Set the brightness value of the color.
-
-- `$brightness` is a number between *0* and *100*.
+### A98 RGB
 
 ```php
-$newColor = $color->setBrightness($brightness);
+use Fyre\Color\Colors\A98Rgb;
 ```
 
-**Set Hue**
+**Get Blue**
 
-Set the hue value of the color.
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Display P3
+
+```php
+use Fyre\Color\Colors\DisplayP3;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Display P3 Linear
+
+```php
+use Fyre\Color\Colors\DisplayP3Linear;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Hex
+
+```php
+use Fyre\Color\Colors\Hex;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**To String**
+
+Get the CSS color string.
+
+- `$alpha` is a boolean indicating whether to include the alpha component in the string, and will default to *null*.
+- `$precision` is a number representing the decimal precision, and will default to *2* (unused).
+- `$shortenHex` is a boolean indicating whether shorten hex output, and will default to *true*.
+- `$name` is a boolean indicating whether to use CSS color names, and will default to *false*.
+
+```php
+$colorString = $color->toString($alpha, $precision, $shortenHex, $name);
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *255*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *255*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *255*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Hsl
+
+```php
+use Fyre\Color\Colors\Hsl;
+```
+
+**Get Hue**
+
+Get the hue value.
+
+```php
+$hue = $color->getHue();
+```
+
+**Get Lightness**
+
+Get the lightness value.
+
+```php
+$lightness = $color->getLightness();
+```
+
+**Get Saturation**
+
+Get the saturation value.
+
+```php
+$saturation = $color->getSaturation();
+```
+
+**With Hue**
+
+Clone the *Color* with a new hue value.
 
 - `$hue` is a number between *0* and *360*.
 
 ```php
-$newColor = $color->setHue($hue);
+$newColor = $color->withHue($hue);
 ```
 
-**Set Saturation**
+**With Lightness**
 
-Set the saturation value of the color.
+Clone the *Color* with a new lightness value.
+
+- `$lightness` is a number between *0* and *100*.
+
+```php
+$newColor = $color->withLightness($lightness);
+```
+
+**With Saturation**
+
+Clone the *Color* with a new saturation value.
 
 - `$saturation` is a number between *0* and *100*.
 
 ```php
-$newColor = $color->setSaturation($saturation);
+$newColor = $color->withSaturation($saturation);
 ```
 
 
-## Color Manipulation
-
-**Darken**
-
-Darken the color by a specified amount.
-
-- `$amount` is a number between *0* and *1*.
+### Hwb
 
 ```php
-$newColor = $color->darken($amount);
+use Fyre\Color\Colors\Hwb;
 ```
 
-**Invert**
+**Get Blackness**
 
-Invert the color.
+Get the blackness value.
 
 ```php
-$newColor = $color->invert();
+$blackness = $color->getBlackness();
 ```
 
-**Lighten**
+**Get Hue**
 
-Lighten the color by a specified amount.
-
-- `$amount` is a number between *0* and *1*.
+Get the hue value.
 
 ```php
-$newColor = $color->lighten($amount);
+$hue = $color->getHue();
 ```
 
-**Shade**
+**Get Whiteness**
 
-Shade the color by a specified amount.
-
-- `$amount` is a number between *0* and *1*.
+Get the whiteness value.
 
 ```php
-$newColor = $color->shade($amount);
+$whiteness = $color->getWhiteness();
 ```
 
-**Tint**
+**With Blackness**
 
-Tint the color by a specified amount.
+Clone the *Color* with a new blackness value.
 
-- `$amount` is a number between *0* and *1*.
+- `$blackness` is a number between *0* and *100*.
 
 ```php
-$newColor = $color->tint($amount);
+$newColor = $color->withBlackness($blackness);
 ```
 
-**Tone**
+**With Hue**
 
-Tone the color by a specified amount.
+Clone the *Color* with a new hue value.
 
-- `$amount` is a number between *0* and *1*.
+- `$hue` is a number between *0* and *360*.
 
 ```php
-$newColor = $color->tone($amount);
+$newColor = $color->withHue($hue);
 ```
 
+**With Whiteness**
 
-## Color Schemes
+Clone the *Color* with a new whiteness value.
 
-**Complementary**
-
-Create a complementary color variation.
-
-```php
-$complementary = $color->complementary();
-```
-
-**Split**
-
-Create an array with 2 split color variations.
+- `$whiteness` is a number between *0* and *100*.
 
 ```php
-[$secondary, $accent] = $color->split();
-```
-
-**Analogous**
-
-Create an array with 2 analogous color variations.
-
-```php
-[$secondary, $accent] = $color->analogous();
-```
-
-**Triadic**
-
-Create an array with 2 triadic color variations.
-
-```php
-[$secondary, $accent] = $color->triadic();
-```
-
-**Tetradic**
-
-Create an array with 3 tetradic color variations.
-
-```php
-[$secondary, $alternate, $accent] = $color->tetradic();
+$newColor = $color->withWhiteness($whiteness);
 ```
 
 
-## Color Palettes
-
-Create a palette of colors from a *Color* object you have created using the following methods.
-
-**Shades**
-
-Create an array with a specified number of shade variations.
-
-- `$shades` is a number indicating how many shades you wish to generate, and will default to *10*.
+### Lab
 
 ```php
-$colorShades = $color->shades($shades);
+use Fyre\Color\Colors\Lab;
 ```
 
-**Tints**
+**Get A**
 
-Create an array with a specified number of tint variations.
-
-- `$tints` is a number indicating how many tints you wish to generate, and will default to *10*.
+Get the a value.
 
 ```php
-$colorTints = $color->tints($tints);
+$a = $color->getA();
 ```
 
-**Tones**
+**Get B**
 
-Create an array with a specified number of tone variations.
-
-- `$tones` is a number indicating how many tones you wish to generate, and will default to *10*.
+Get the b value.
 
 ```php
-$colorTones = $color->tones($tones);
+$b = $color->getB();
 ```
 
-**Palette**
+**Get Lightness**
 
-Create a palette object with a specified number of shades, tints and tone variations.
-
-- `$shades` is a number indicating how many shades you wish to generate, and will default to *10*.
-- `$tints` is a number indicating how many tints you wish to generate, and will default to *10*.
-- `$tones` is a number indicating how many tones you wish to generate, and will default to *10*.
+Get the lightness value.
 
 ```php
-$colorPalette = $color->palette($shades, $tints, $tones);
+$lightness = $color->getLightness();
+```
+
+**With A**
+
+Clone the *Color* with a new a value.
+
+- `$a` is a number between *-128* and *127*.
+
+```php
+$newColor = $color->withA($a);
+```
+
+**With B**
+
+- `$b` is a number between *-128* and *127*.
+
+```php
+$newColor = $color->withB($b);
+```
+
+**With Lightness**
+
+Clone the *Color* with a new lightness value.
+
+- `$lightness` is a number between *0* and *100*.
+
+```php
+$newColor = $color->withLightness($lightness);
 ```
 
 
-## Static Methods
-
-**Contrast**
-
-Calculate the contrast between two colors (between *1* and *21*).
-
-- `$color1` is a *Color* object.
-- `$color2` is a *Color* object.
+### Lch
 
 ```php
-$contrast = Color::contrast($color1, $color2);
+use Fyre\Color\Colors\Lch;
 ```
 
-**Distance**
+**Get Chroma**
 
-Calculate the distance between two colors.
-
-- `$color1` is a *Color* object.
-- `$color2` is a *Color* object.
+Get the chroma value.
 
 ```php
-$distance = Color::dist($color1, $color2);
+$chroma = $color->getChroma();
 ```
 
-**Find Contrast**
+**Get Hue**
 
-Find an optimally contrasting color for another color.
-
-- `$color1` is a *Color* object.
-- `$color2` is a *Color* object, and will default to *null*.
-- `$minContrast` is a number between *1* and *21* indicating the minimum valid contrast, and will default to *4.5*.
-- `$stepSize` is a number between *0* and *1* indicating the amount to darken/lighten the color on each iteration, and will default to *0.01*.
+Get the hue value.
 
 ```php
-$contrastColor = Color::findContrast($color1, $color2, $minContrast, $stepSize);
+$hue = $color->getHue();
 ```
 
-If `$color2` value is *null*, `$color1` will be used instead.
+**Get Lightness**
 
-This method will tint/shade `$color2` until it meets a minimum contrast threshold with `$color1`, then the new color will be returned. If no valid contrast value can be found, this method will return *null* instead.
-
-**Mix**
-
-Create a new *Color* by mixing two colors together by a specified amount.
-
-- `$color1` is a *Color* object.
-- `$color2` is a *Color* object.
-- `$amount` is a number between *0* and *1*.
+Get the lightness value.
 
 ```php
-$mixed = Color::mix($color1, $color2, $amount);
+$lightness = $color->getLightness();
 ```
 
-**Multiply**
+**With Chroma**
 
-Create a new *Color* by multiplying two colors together by a specified amount.
+Clone the *Color* with a new chroma value.
 
-- `$color1` is a *Color* object.
-- `$color2` is a *Color* object.
-- `$amount` is a number between *0* and *1*.
+- `$chroma` is a number between *0* and *230*.
 
 ```php
-$multiplied = Color::multiply($color1, $color2, $amount);
+$newColor = $color->withChroma($chroma);
+```
+
+**With Hue**
+
+Clone the *Color* with a new hue value.
+
+- `$hue` is a number between *0* and *360*.
+
+```php
+$newColor = $color->withHue($hue);
+```
+
+**With Lightness**
+
+Clone the *Color* with a new lightness value.
+
+- `$lightness` is a number between *0* and *100*.
+
+```php
+$newColor = $color->withLightness($lightness);
+```
+
+
+### OkLab
+
+```php
+use Fyre\Color\Colors\OkLab;
+```
+
+**Get A**
+
+Get the a value.
+
+```php
+$a = $color->getA();
+```
+
+**Get B**
+
+Get the b value.
+
+```php
+$b = $color->getB();
+```
+
+**Get Lightness**
+
+Get the lightness value.
+
+```php
+$lightness = $color->getLightness();
+```
+
+**With A**
+
+Clone the *Color* with a new a value.
+
+- `$a` is a number between *-0.4* and *0.4*.
+
+```php
+$newColor = $color->withA($a);
+```
+
+**With B**
+
+- `$b` is a number between *-0.4* and *0.4*.
+
+```php
+$newColor = $color->withB($b);
+```
+
+**With Lightness**
+
+Clone the *Color* with a new lightness value.
+
+- `$lightness` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withLightness($lightness);
+```
+
+
+### OkLch
+
+```php
+use Fyre\Color\Colors\OkLch;
+```
+
+**Get Chroma**
+
+Get the chroma value.
+
+```php
+$chroma = $color->getChroma();
+```
+
+**Get Hue**
+
+Get the hue value.
+
+```php
+$hue = $color->getHue();
+```
+
+**Get Lightness**
+
+Get the lightness value.
+
+```php
+$lightness = $color->getLightness();
+```
+
+**With Chroma**
+
+Clone the *Color* with a new chroma value.
+
+- `$chroma` is a number between *0* and *0.4*.
+
+```php
+$newColor = $color->withChroma($chroma);
+```
+
+**With Hue**
+
+Clone the *Color* with a new hue value.
+
+- `$hue` is a number between *0* and *360*.
+
+```php
+$newColor = $color->withHue($hue);
+```
+
+**With Lightness**
+
+Clone the *Color* with a new lightness value.
+
+- `$lightness` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withLightness($lightness);
+```
+
+
+### ProPhoto Rgb
+
+```php
+use Fyre\Color\Colors\ProPhotoRgb;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Rec2020
+
+```php
+use Fyre\Color\Colors\Rec2020;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Rgb
+
+```php
+use Fyre\Color\Colors\Rgb;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**To String**
+
+Get the CSS color string.
+
+- `$alpha` is a boolean indicating whether to include the alpha component in the string, and will default to *null*.
+- `$precision` is a number representing the decimal precision, and will default to *2*.
+- `$name` is a boolean indicating whether to use CSS color names, and will default to *false*.
+
+```php
+$colorString = $color->toString($alpha, $precision, $name);
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *255*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *255*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *255*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Srgb
+
+```php
+use Fyre\Color\Colors\Srgb;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Srgb Linear
+
+```php
+use Fyre\Color\Colors\SrgbLinear;
+```
+
+**Get Blue**
+
+Get the blue value.
+
+```php
+$blue = $color->getBlue();
+```
+
+**Get Green**
+
+Get the green value.
+
+```php
+$green = $color->getGreen();
+```
+
+**Get Red**
+
+Get the red value.
+
+```php
+$red = $color->getRed();
+```
+
+**With Blue**
+
+Clone the *Color* with a new blue value.
+
+- `$blue` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withBlue($blue);
+```
+
+**With Green**
+
+Clone the *Color* with a new green value.
+
+- `$green` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withGreen($green);
+```
+
+**With Red**
+
+Clone the *Color* with a new red value.
+
+- `$red` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withRed($red);
+```
+
+
+### Xyz D50
+
+```php
+use Fyre\Color\Colors\XyzD50;
+```
+
+**Get X**
+
+Get the x value.
+
+```php
+$x = $color->getX();
+```
+
+**Get Y**
+
+Get the y value.
+
+```php
+$y = $color->getY();
+```
+
+**Get Z**
+
+Get the z value.
+
+```php
+$z = $color->getZ();
+```
+
+**With X**
+
+Clone the *Color* with a new x value.
+
+- `$x` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withX($x);
+```
+
+**With Y**
+
+Clone the *Color* with a new y value.
+
+- `$y` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withY($y);
+```
+
+**With Z**
+
+Clone the *Color* with a new z value.
+
+- `$z` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withZ($z);
+```
+
+
+### Xyz D65
+
+```php
+use Fyre\Color\Colors\XyzD65;
+```
+
+**Get X**
+
+Get the x value.
+
+```php
+$x = $color->getX();
+```
+
+**Get Y**
+
+Get the y value.
+
+```php
+$y = $color->getY();
+```
+
+**Get Z**
+
+Get the z value.
+
+```php
+$z = $color->getZ();
+```
+
+**With X**
+
+Clone the *Color* with a new x value.
+
+- `$x` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withX($x);
+```
+
+**With Y**
+
+Clone the *Color* with a new y value.
+
+- `$y` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withY($y);
+```
+
+**With Z**
+
+Clone the *Color* with a new z value.
+
+- `$z` is a number between *0* and *1*.
+
+```php
+$newColor = $color->withZ($z);
 ```

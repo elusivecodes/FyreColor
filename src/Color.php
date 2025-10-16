@@ -3,24 +3,45 @@ declare(strict_types=1);
 
 namespace Fyre\Color;
 
-use Fyre\Color\Internal\ColorConverter;
+use Fyre\Color\Colors\A98Rgb;
+use Fyre\Color\Colors\DisplayP3;
+use Fyre\Color\Colors\DisplayP3Linear;
+use Fyre\Color\Colors\Hex;
+use Fyre\Color\Colors\Hsl;
+use Fyre\Color\Colors\Hwb;
+use Fyre\Color\Colors\Lab;
+use Fyre\Color\Colors\Lch;
+use Fyre\Color\Colors\OkLab;
+use Fyre\Color\Colors\OkLch;
+use Fyre\Color\Colors\ProPhotoRgb;
+use Fyre\Color\Colors\Rec2020;
+use Fyre\Color\Colors\Rgb;
+use Fyre\Color\Colors\Srgb;
+use Fyre\Color\Colors\SrgbLinear;
+use Fyre\Color\Colors\XyzD50;
+use Fyre\Color\Colors\XyzD65;
 use Fyre\Utility\Traits\MacroTrait;
-use RuntimeException;
+use Fyre\Utility\Traits\StaticMacroTrait;
+use InvalidArgumentException;
 
-use function array_fill;
 use function array_key_exists;
-use function array_keys;
 use function array_map;
 use function array_reduce;
-use function array_search;
-use function array_slice;
+use function array_values;
+use function count;
+use function fmod;
 use function hexdec;
 use function hypot;
+use function implode;
 use function max;
 use function min;
 use function preg_match;
+use function preg_replace;
+use function preg_split;
+use function rad2deg;
 use function round;
-use function sprintf;
+use function str_ends_with;
+use function str_split;
 use function strlen;
 use function strtolower;
 use function substr;
@@ -31,11 +52,12 @@ use const PHP_INT_MAX;
 /**
  * Color
  */
-class Color
+abstract class Color
 {
     use MacroTrait;
+    use StaticMacroTrait;
 
-    protected const COLORS = [
+    public const CSS_COLORS = [
         'aliceblue' => '#f0f8ff',
         'antiquewhite' => '#faebd7',
         'aqua' => '#00ffff',
@@ -186,367 +208,386 @@ class Color
         'yellowgreen' => '#9acd32',
     ];
 
-    protected float $a;
+    protected const COLOR_SPACE = '';
 
-    protected float $b;
+    protected const CONVERSION_MAP = [
+        'a98-rgb' => 'toA98Rgb',
+        'display-p3' => 'toDisplayP3',
+        'display-p3-linear' => 'toDisplayP3Linear',
+        'hsl' => 'toHsl',
+        'hwb' => 'toHwb',
+        'lab' => 'toLab',
+        'lch' => 'toLch',
+        'oklab' => 'toOkLab',
+        'oklch' => 'toOkLch',
+        'prophoto-rgb' => 'toProPhotoRgb',
+        'rec2020' => 'toRec2020',
+        'hex' => 'toHex',
+        'rgb' => 'toRgb',
+        'srgb' => 'toSrgb',
+        'srgb-linear' => 'toSrgbLinear',
+        'xyz-d50' => 'toXyzD50',
+        'xyz-d65' => 'toXyzD65',
+    ];
 
-    protected float $g;
-
-    protected float $r;
+    public readonly float $alpha;
 
     /**
-     * Get the contrast value between two colors.
+     * Create a Color from A98 RGB color values.
      *
-     * @param Color $color1 The first Color.
-     * @param Color $color2 The second Color.
-     * @return float The contrast value. (1, 21)
+     * @param float $red The red value. (0, 1)
+     * @param float $green The green value. (0, 1)
+     * @param float $blue The blue value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
      */
-    public static function contrast(Color $color1, Color $color2): float
+    public static function createFromA98Rgb(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
     {
-        $luma1 = $color1->luma();
-        $luma2 = $color2->luma();
-
-        return (max($luma1, $luma2) + .05) / (min($luma1, $luma2) + .05);
+        return new A98Rgb($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
     }
 
     /**
-     * Calculate the distance between two colors.
+     * Create a Color from Display P3 color values.
      *
-     * @param Color $color1 The first Color.
-     * @param Color $color2 The second Color.
-     * @return float The distance between the colors.
+     * @param float $red The red value. (0, 1)
+     * @param float $green The green value. (0, 1)
+     * @param float $blue The blue value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
      */
-    public static function dist(Color $color1, Color $color2): float
+    public static function createFromDisplayP3(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
     {
-        return array_reduce([
-            $color1->r - $color2->r,
-            $color1->g - $color2->g,
-            $color1->b - $color2->b,
-        ], fn(float $x, float $y) => hypot($x, $y), 0);
+        return new DisplayP3($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
     }
 
     /**
-     * Find an optimally contrasting color for another color.
+     * Create a Color from Display P3 Linear color values.
      *
-     * @param Color $color1 The first Color.
-     * @param Color|null $color2 The second Color.
-     * @param float|int $minContrast The minimum contrast.
-     * @param float|int $stepSize The step size.
-     * @return Color|null The new Color.
+     * @param float $red The red value. (0, 1)
+     * @param float $green The green value. (0, 1)
+     * @param float $blue The blue value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
      */
-    public static function findContrast(Color $color1, Color|null $color2 = null, float|int $minContrast = 4.5, float|int $stepSize = .01): Color|null
+    public static function createFromDisplayP3Linear(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
     {
-        $color2 ??= $color1;
+        return new DisplayP3Linear($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
+    }
 
-        if (static::contrast($color1, $color2) >= $minContrast) {
-            return $color2;
+    /**
+     * Create a Color from HSL color values.
+     *
+     * @param float $hue The hue value. (0, 360)
+     * @param float $saturation The saturation value. (0, 100)
+     * @param float $lightness The lightness value. (0, 100)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromHsl(float $hue = 0, float $saturation = 0, float $lightness = 0, float $alpha = 1): static
+    {
+        return new Hsl($hue, $saturation, $lightness, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from HWB color values.
+     *
+     * @param float $hue The hue value. (0, 360)
+     * @param float $whiteness The whiteness value. (0, 100)
+     * @param float $blackness The blackness value. (0, 100)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromHwb(float $hue = 0, float $whiteness = 0, float $blackness = 0, float $alpha = 1): static
+    {
+        return new Hwb($hue, $whiteness, $blackness, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from LAB color values.
+     *
+     * @param float $lightness The lightness value. (0, 100)
+     * @param float $a The a value. (-125, 125)
+     * @param float $b The b value. (-125, 125)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromLab(float $lightness = 0, float $a = 0, float $b = 0, float $alpha = 1): static
+    {
+        return new Lab($lightness, $a, $b, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from LCH color values.
+     *
+     * @param float $lightness The lightness value. (0, 100)
+     * @param float $chroma The chroma value. (0, 150)
+     * @param float $hue The hue value. (0, 360)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromLch(float $lightness = 0, float $chroma = 0, float $hue = 0, float $alpha = 1): static
+    {
+        return new Lch($lightness, $chroma, $hue, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from OK LAB color values.
+     *
+     * @param float $lightness The lightness value. (0, 1)
+     * @param float $a The a value. (-0.4, 0.4)
+     * @param float $b The b value. (-0.4, 0.4)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromOkLab(float $lightness = 0, float $a = 0, float $b = 0, float $alpha = 1): static
+    {
+        return new OkLab($lightness, $a, $b, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from OK LCH color values.
+     *
+     * @param float $lightness The lightness value. (0, 1)
+     * @param float $chroma The chroma value. (0, 0.4)
+     * @param float $hue The hue value. (0, 360)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromOkLch(float $lightness = 0, float $chroma = 0, float $hue = 0, float $alpha = 1): static
+    {
+        return new OkLch($lightness, $chroma, $hue, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from ProPhoto RGB color values.
+     *
+     * @param float $red The red value. (0, 1)
+     * @param float $green The green value. (0, 1)
+     * @param float $blue The blue value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromProPhotoRgb(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
+    {
+        return new ProPhotoRgb($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from Rec. 2020 color values.
+     *
+     * @param float $red The red value. (0, 1)
+     * @param float $green The green value. (0, 1)
+     * @param float $blue The blue value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromRec2020(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
+    {
+        return new Rec2020($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from RGB color values.
+     *
+     * @param float $red The red value. (0, 255)
+     * @param float $green The green value. (0, 255)
+     * @param float $blue The blue value. (0, 255)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromRgb(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
+    {
+        return new Rgb($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from SRGB color values.
+     *
+     * @param float $red The red value. (0, 1)
+     * @param float $green The green value. (0, 1)
+     * @param float $blue The blue value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromSrgb(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
+    {
+        return new Srgb($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from SRGB Linear color values.
+     *
+     * @param float $red The red value. (0, 1)
+     * @param float $green The green value. (0, 1)
+     * @param float $blue The blue value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
+     */
+    public static function createFromSrgbLinear(float $red = 0, float $green = 0, float $blue = 0, float $alpha = 1): static
+    {
+        return new SrgbLinear($red, $green, $blue, $alpha)->to(static::COLOR_SPACE);
+    }
+
+    /**
+     * Create a Color from a CSS color string.
+     *
+     * @param string $string The CSS color string.
+     * @return Color The Color.
+     *
+     * @throws InvalidArgumentException if the CSS color string is not valid.
+     */
+    public static function createFromString(string $string): static
+    {
+        $string = strtolower(trim(preg_replace('/\s+/', ' ', $string)));
+
+        if ($string === 'transparent') {
+            return static::createFromRgb(alpha: 0);
         }
 
-        $methods = ['tint', 'shade'];
-        for ($i = $stepSize; $i <= 1; $i += $stepSize) {
-            foreach ($methods as $method) {
-                $tempColor = $color2->$method($i);
-                if (static::contrast($color1, $tempColor) >= $minContrast) {
-                    return $tempColor;
-                }
+        if (array_key_exists($string, static::CSS_COLORS)) {
+            $string = static::CSS_COLORS[$string];
+        }
+
+        if (preg_match('/^#([0-9a-f]{3,8})$/i', $string, $match)) {
+            $hex = $match[1];
+
+            if (strlen($hex) <= 4) {
+                $hex = implode('', array_map(fn(string $c): string => $c.$c, str_split($hex)));
+            }
+
+            return new Hex(
+                hexdec(substr($hex, 0, 2)),
+                hexdec(substr($hex, 2, 2)),
+                hexdec(substr($hex, 4, 2)),
+                strlen($hex) > 6 ?
+                    hexdec(substr($hex, 6, 2)) / 255 :
+                    1,
+            )->to(static::COLOR_SPACE);
+        }
+        if (preg_match('/^(rgb|rgba|hsl|hsla|hwb|lab|lch|oklab|oklch)\((.+)\)$/', $string, $match)) {
+            $space = $match[1];
+            $parts = preg_split('/\s*[,\/]\s*|\s+/', trim($match[2]), 4);
+
+            if (count($parts) < 4) {
+                $parts[] = '1';
+            }
+
+            switch ($space) {
+                case 'hsl':
+                case 'hsla':
+                    return static::createFromHsl(
+                        static::parseCssAngle($parts[0]),
+                        static::parseCssNumber($parts[1], 100),
+                        static::parseCssNumber($parts[2], 100),
+                        static::parseCssNumber($parts[3]),
+                    );
+                case 'hwb':
+                    return static::createFromHwb(
+                        static::parseCssAngle($parts[0]),
+                        static::parseCssNumber($parts[1], 100),
+                        static::parseCssNumber($parts[2], 100),
+                        static::parseCssNumber($parts[3]),
+                    );
+                case 'lab':
+                    return static::createFromLab(
+                        static::parseCssNumber($parts[0], 100),
+                        static::parseCssNumber($parts[1], 125),
+                        static::parseCssNumber($parts[2], 125),
+                        static::parseCssNumber($parts[3]),
+                    );
+                case 'lch':
+                    return static::createFromLch(
+                        static::parseCssNumber($parts[0], 100),
+                        static::parseCssNumber($parts[1], 150),
+                        static::parseCssAngle($parts[2]),
+                        static::parseCssNumber($parts[3]),
+                    );
+                case 'oklab':
+                    return static::createFromOkLab(
+                        static::parseCssNumber($parts[0]),
+                        static::parseCssNumber($parts[1], 0.04),
+                        static::parseCssNumber($parts[2], 0.04),
+                        static::parseCssNumber($parts[3]),
+                    );
+                case 'oklch':
+                    return static::createFromOkLch(
+                        static::parseCssNumber($parts[0]),
+                        static::parseCssNumber($parts[1], 0.04),
+                        static::parseCssAngle($parts[2]),
+                        static::parseCssNumber($parts[3]),
+                    );
+                case 'rgb':
+                case 'rgba':
+                    return static::createFromRgb(
+                        static::parseCssNumber($parts[0], 255),
+                        static::parseCssNumber($parts[1], 255),
+                        static::parseCssNumber($parts[2], 255),
+                        static::parseCssNumber($parts[3]),
+                    );
+            }
+        } else if (preg_match('/^color\((a98-rgb|display-p3(?:-linear)?|prophoto-rgb|rec2020|srgb(?:-linear)?|xyz(?:-d50|-d65)?)\s+(.+)\)$/', $string, $match)) {
+            $space = $match[1];
+            $parts = preg_split('/\s*\/\s*|\s+/', trim($match[2]), 4);
+            $values = array_map(static::parseCssNumber(...), $parts);
+
+            switch ($space) {
+                case 'a98-rgb':
+                    return static::createFromA98Rgb(...$values);
+                case 'display-p3':
+                    return static::createFromDisplayP3(...$values);
+                case 'display-p3-linear':
+                    return static::createFromDisplayP3Linear(...$values);
+                case 'prophoto-rgb':
+                    return static::createFromProPhotoRgb(...$values);
+                case 'rec2020':
+                    return static::createFromRec2020(...$values);
+                case 'srgb':
+                    return static::createFromSrgb(...$values);
+                case 'srgb-linear':
+                    return static::createFromSrgbLinear(...$values);
+                case 'xyz-d50':
+                    return static::createFromXyzD50(...$values);
+                case 'xyz':
+                case 'xyz-d65':
+                    return static::createFromXyzD65(...$values);
             }
         }
 
-        return null;
+        throw new InvalidArgumentException('Invalid color string: '.$string);
     }
 
     /**
-     * Create a new Color from CMY values.
+     * Create a Color from XYZ D50 color values.
      *
-     * @param float|int $c The cyan value. (0, 100)
-     * @param float|int $m The magenta value. (0, 100)
-     * @param float|int $y The yellow value. (0, 100)
-     * @param float|int $a The alpha value. (0, 1)
-     * @return Color A new Color.
+     * @param float $x The x value. (0, 1)
+     * @param float $y The y value. (0, 1)
+     * @param float $z The z value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
      */
-    public static function fromCMY(float|int $c, float|int $m, float|int $y, float|int $a = 1): static
+    public static function createFromXyzD50(float $x = 0, float $y = 0, float $z = 0, float $alpha = 1): static
     {
-        [$r, $g, $b] = ColorConverter::CMYToRGB($c, $m, $y);
-
-        return new static($r, $g, $b, $a);
+        return new XyzD50($x, $y, $z, $alpha)->to(static::COLOR_SPACE);
     }
 
     /**
-     * Create a new Color from CMYK values.
+     * Create a Color from XYZ D65 color values.
      *
-     * @param float|int $c The cyan value. (0, 100)
-     * @param float|int $m The magenta value. (0, 100)
-     * @param float|int $y The yellow value. (0, 100)
-     * @param float|int $k The key value. (0, 100)
-     * @param float|int $a The alpha value. (0, 1)
-     * @return Color A new Color.
+     * @param float $x The x value. (0, 1)
+     * @param float $y The y value. (0, 1)
+     * @param float $z The z value. (0, 1)
+     * @param float $alpha The alpha value. (0, 1)
+     * @return Color The Color.
      */
-    public static function fromCMYK(float|int $c, float|int $m, float|int $y, float|int $k, float|int $a = 1): static
+    public static function createFromXyzD65(float $x = 0, float $y = 0, float $z = 0, float $alpha = 1): static
     {
-        [$c, $m, $y] = ColorConverter::CMYKToCMY($c, $m, $y, $k);
-
-        return static::fromCMY($c, $m, $y, $a);
+        return new XyzD65($x, $y, $z, $alpha)->to(static::COLOR_SPACE);
     }
 
     /**
-     * Create a new Color from a hex color string.
+     * Get the CSS color string.
      *
-     * @param string $string The hex color string.
-     * @return Color A new Color.
-     *
-     * @throws RuntimeException if the hex string is not valid.
-     */
-    public static function fromHexString(string $string): static
-    {
-        $string = trim($string);
-
-        if (strlen($string) > 6) {
-            $pattern = '/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i';
-        } else {
-            $pattern = '/^#([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f]?)$/i';
-        }
-
-        if (!preg_match($pattern, $string, $match)) {
-            throw new RuntimeException('Invalid hex string: '.$string);
-        }
-
-        $rgb = array_map(
-            function(string $value): int {
-                if (strlen($value) < 2) {
-                    $value = $value.$value;
-                }
-
-                return (int) hexdec($value);
-            },
-            array_slice($match, 1, 5)
-        );
-
-        $rgb[3] ??= 255;
-
-        return new static($rgb[0], $rgb[1], $rgb[2], ($rgb[3] ?: 255) / 255);
-    }
-
-    /**
-     * Create a new Color from HSL values.
-     *
-     * @param float|int $h The hue value. (0, 360)
-     * @param float|int $s The saturation value. (0, 100)
-     * @param float|int $l The lightness value. (0, 100)
-     * @param float|int $a The alpha value. (0, 1)
-     * @return Color A new Color.
-     */
-    public static function fromHSL(float|int $h, float|int $s, float|int $l, float|int $a = 1): static
-    {
-        [$r, $g, $b] = ColorConverter::HSLToRGB($h, $s, $l);
-
-        return new static($r, $g, $b, $a);
-    }
-
-    /**
-     * Create a new Color from a HSL color string.
-     *
-     * @param string $string The HSL color string.
-     * @return Color A new Color.
-     *
-     * @throws RuntimeException if the HSL string is not valid.
-     */
-    public static function fromHSLString(string $string): static
-    {
-        $string = trim($string);
-
-        if (preg_match('/^hsl\(((?:\d*\.)?\d+)deg\s+((?:\d*\.)?\d+)\%\s+((?:\d*\.)?\d+)\%\)$/i', $string, $match)) {
-            return static::fromHSL((float) $match[1], (float) $match[2], (float) $match[3]);
-        }
-
-        if (preg_match('/^hsl\(((?:\d*\.)?\d+)deg\s+((?:\d*\.)?\d+)\%\s+((?:\d*\.)?\d+)\%\s*\/\s*((?:\d*\.)?\d+)(\%?)\)$/i', $string, $match)) {
-            return static::fromHSL((float) $match[1], (float) $match[2], (float) $match[3], (float) $match[4] / 100);
-        }
-
-        if (preg_match('/^hsl\(((?:\d*\.)?\d+),\s*((?:\d*\.)?\d+)\%,\s*((?:\d*\.)?\d+)\%\)$/i', $string, $match)) {
-            return static::fromHSL((float) $match[1], (float) $match[2], (float) $match[3]);
-        }
-
-        if (preg_match('/^hsla\(((?:\d*\.)?\d+),\s*((?:\d*\.)?\d+)\%,\s*((?:\d*\.)?\d+)\%,\s*((?:\d*\.)?\d+)(\%?)\)$/i', $string, $match)) {
-            return static::fromHSL((float) $match[1], (float) $match[2], (float) $match[3], (float) $match[4]);
-        }
-
-        throw new RuntimeException('Invalid HSL string: '.$string);
-    }
-
-    /**
-     * Create a new Color from HSV values.
-     *
-     * @param float|int $h The hue value. (0, 360)
-     * @param float|int $s The saturation value. (0, 100)
-     * @param float|int $v The brightness value. (0, 100)
-     * @param float|int $a The alpha value. (0, 1)
-     * @return Color A new Color.
-     */
-    public static function fromHSV(float|int $h, float|int $s, float|int $v, float|int $a = 1): static
-    {
-        [$r, $g, $b] = ColorConverter::HSVToRGB($h, $s, $v);
-
-        return new static($r, $g, $b, $a);
-    }
-
-    /**
-     * Create a new Color from RGB values.
-     *
-     * @param float|int $r The red value. (0, 255)
-     * @param float|int $g The green value. (0, 255)
-     * @param float|int $b The blue value. (0, 255)
-     * @param float|int $a The alpha value. (0, 1)
-     * @return Color A new Color.
-     */
-    public static function fromRGB(float|int $r, float|int $g, float|int $b, float|int $a = 1): static
-    {
-        return new static($r, $g, $b, $a);
-    }
-
-    /**
-     * Create a new Color from a RGB color string.
-     *
-     * @param string $string The RGB color string.
-     * @return Color A new Color.
-     *
-     * @throws RuntimeException if the RGB string is not valid.
-     */
-    public static function fromRGBString(string $string): static
-    {
-        $string = trim($string);
-
-        if (preg_match('/^rgb\(((?:\d*\.)?\d+)\s+((?:\d*\.)?\d+)\s+((?:\d*\.)?\d+)\)$/i', $string, $match)) {
-            return static::fromRGB((float) $match[1], (float) $match[2], (float) $match[3]);
-        }
-
-        if (preg_match('/^rgb\(((?:\d*\.)?\d+)\s+((?:\d*\.)?\d+)\s+((?:\d*\.)?\d+)\s*\/\s*((?:\d*\.)?\d+)(\%?)\)$/i', $string, $match)) {
-            return static::fromRGB((float) $match[1], (float) $match[2], (float) $match[3], (float) $match[4] / 100);
-        }
-
-        if (preg_match('/^rgb\(((?:\d*\.)?\d+),\s*((?:\d*\.)?\d+),\s*((?:\d*\.)?\d+)\)$/i', $string, $match)) {
-            return static::fromRGB((float) $match[1], (float) $match[2], (float) $match[3]);
-        }
-
-        if (preg_match('/^rgba\(((?:\d*\.)?\d+),\s*((?:\d*\.)?\d+),\s*((?:\d*\.)?\d+),\s*((?:\d*\.)?\d+)(\%?)\)$/i', $string, $match)) {
-            return static::fromRGB((float) $match[1], (float) $match[2], (float) $match[3], (float) $match[4]);
-        }
-
-        throw new RuntimeException('Invalid RGB string: '.$string);
-    }
-
-    /**
-     * Create a new Color from a HTML color string.
-     *
-     * @param string $string The HTML color string.
-     * @return Color A new Color.
-     *
-     * @throws RuntimeException if the color string is not valid.
-     */
-    public static function fromString(string $string): static
-    {
-        $string = strtolower($string);
-        $string = trim($string);
-
-        if ($string === 'transparent') {
-            return new static(0, 0, 0, 0);
-        }
-
-        if (array_key_exists($string, static::COLORS)) {
-            $string = static::COLORS[$string];
-        }
-
-        if (substr($string, 0, 1) === '#') {
-            return static::fromHexString($string);
-        }
-
-        if (preg_match('/^rgb/i', $string)) {
-            return static::fromRGBString($string);
-        }
-
-        if (preg_match('/^hsl/i', $string)) {
-            return static::fromHSLString($string);
-        }
-
-        throw new RuntimeException('Invalid color string: '.$string);
-    }
-
-    /**
-     * Create a new Color by mixing two colors together by a specified amount.
-     *
-     * @param Color $color1 The first Color.
-     * @param Color $color2 The second Color.
-     * @param float|int $amount The amount to mix them by. (0, 1)
-     * @return Color A new Color.
-     */
-    public static function mix(Color $color1, Color $color2, float|int $amount): static
-    {
-        return new static(
-            static::lerp($color1->r, $color2->r, $amount),
-            static::lerp($color1->g, $color2->g, $amount),
-            static::lerp($color1->b, $color2->b, $amount),
-            static::lerp($color1->a, $color2->a, $amount)
-        );
-    }
-
-    /**
-     * Create a new Color by multiplying two colors together by a specified amount.
-     *
-     * @param Color $color1 The first Color.
-     * @param Color $color2 The second Color.
-     * @param float|int $amount The amount to multiply them by. (0, 1)
-     * @return Color A new Color.
-     */
-    public static function multiply(Color $color1, Color $color2, float|int $amount): static
-    {
-        return new static(
-            static::lerp(
-                $color1->r,
-                $color1->r * $color2->r / 255,
-                $amount
-            ),
-            static::lerp(
-                $color1->g,
-                $color1->g * $color2->g / 255,
-                $amount
-            ),
-            static::lerp(
-                $color1->b,
-                $color1->b * $color2->b / 255,
-                $amount
-            ),
-            static::lerp(
-                $color1->a,
-                $color1->a * $color2->a,
-                $amount
-            )
-        );
-    }
-
-    /**
-     * New Color constructor.
-     *
-     * @param float|int $r The red value, or the brightness value.
-     * @param float|int $g The green value or the alpha value.
-     * @param float|int $a The alpha value.
-     * @param float|int|null $g The blue value.
-     */
-    public function __construct(float|int $r = 0, float|int $g = 1, float|int|null $b = null, float|int $a = 1)
-    {
-        if ($b === null) {
-            $a = $g;
-            $b = $g = $r = round($r * 2.55, 2);
-        }
-
-        $this->r = static::clamp($r, 0, 255);
-        $this->g = static::clamp($g, 0, 255);
-        $this->b = static::clamp($b, 0, 255);
-        $this->a = static::clamp($a, 0, 1);
-    }
-
-    /**
-     * Get a HTML string representation of the color.
-     *
-     * @return string The HTML color string.
+     * @return string The CSS color string.
      */
     public function __toString(): string
     {
@@ -554,117 +595,51 @@ class Color
     }
 
     /**
-     * Create an array with 2 analogous color variations.
+     * Calculate the contrast between this and another Color.
      *
-     * @return array An array containing 2 analogous color variations.
+     * @param Color $other The other Color.
+     * @return float The contrast.
      */
-    public function analogous(): array
+    public function contrast(Color $other): float
     {
-        [$h, $s, $v] = ColorConverter::RGBToHSV($this->r, $this->g, $this->b);
-        [$r1, $g1, $b1] = ColorConverter::HSVToRGB($h + 30, $s, $v);
-        [$r2, $g2, $b2] = ColorConverter::HSVToRGB($h - 30, $s, $v);
+        $l1 = $this->luma();
+        $l2 = $other->luma();
 
-        return [
-            new static($r1, $g1, $b1, $this->a),
-            new static($r2, $g2, $b2, $this->a),
-        ];
+        if ($l1 < $l2) {
+            return ($l2 + .05) / ($l1 + .05);
+        }
+
+        return ($l1 + .05) / ($l2 + .05);
     }
 
     /**
-     * Create a complementary color variation.
+     * Get the alpha value.
      *
-     * @return Color A complementary color variation.
+     * @return float The alpha value.
      */
-    public function complementary(): static
+    public function getAlpha(): float
     {
-        [$h, $s, $v] = ColorConverter::RGBToHSV($this->r, $this->g, $this->b);
-        [$r, $g, $b] = ColorConverter::HSVToRGB($h + 180, $s, $v);
-
-        return new static($r, $g, $b, $this->a);
+        return $this->alpha;
     }
 
     /**
-     * Darken the color by a specified amount.
+     * Find the closest HTML color name for this color (in current color space).
      *
-     * @param float|int $amount The amount to darken the color by. (0, 1)
-     * @return Color A new Color.
-     */
-    public function darken(float|int $amount): static
-    {
-        [$h, $s, $l] = $this->getHSL();
-        $l -= $l * $amount;
-        [$r, $g, $b] = ColorConverter::HSLToRGB($h, $s, $l);
-
-        return new static($r, $g, $b, $this->a);
-    }
-
-    /**
-     * Get the alpha value of the color.
-     *
-     * @return float|int The alpha value. (0, 1)
-     */
-    public function getAlpha(): float|int
-    {
-        return $this->a;
-    }
-
-    /**
-     * Get the brightness value of the color.
-     *
-     * @return float|int The brightness value. (0, 100)
-     */
-    public function getBrightness(): float|int
-    {
-        return $this->getHSV()[2];
-    }
-
-    /**
-     * Get the hue value of the color.
-     *
-     * @return float|int The hue value. (0, 360)
-     */
-    public function getHue(): float|int
-    {
-        return $this->getHSV()[0];
-    }
-
-    /**
-     * Get the saturation value of the color.
-     *
-     * @return float|int The saturation value. (0, 100)
-     */
-    public function getSaturation(): float|int
-    {
-        return $this->getHSV()[1];
-    }
-
-    /**
-     * Invert the color.
-     *
-     * @return Color A new Color.
-     */
-    public function invert(): static
-    {
-        return new static(
-            255 - $this->r,
-            255 - $this->g,
-            255 - $this->b,
-            $this->a
-        );
-    }
-
-    /**
-     * Get the closest color name for the color.
-     *
-     * @return string The name.
+     * @return string The closest HTML color name.
      */
     public function label(): string
     {
-        $closestDist = PHP_INT_MAX;
+        $a = array_values($this->toArray());
 
-        foreach (static::COLORS as $label => $color) {
-            $color = static::fromHexString($color);
-            $dist = static::dist($this, $color);
+        $closestDist = PHP_INT_MAX;
+        foreach (static::CSS_COLORS as $label => $hex) {
+            $b = array_values(static::createFromString($hex)->toArray());
+
+            $dist = array_reduce([
+                $a[0] - $b[0],
+                $a[1] - $b[1],
+                $a[2] - $b[2],
+            ], fn(float $x, float $y) => hypot($x, $y), 0);
 
             if ($dist < $closestDist) {
                 $closest = $label;
@@ -676,420 +651,332 @@ class Color
     }
 
     /**
-     * Lighten the color by a specified amount.
+     * Calculate the relative luminance value.
      *
-     * @param float|int $amount The amount to lighten the color by. (0, 1)
-     * @return Color A new Color.
-     */
-    public function lighten(float|int $amount): static
-    {
-        [$h, $s, $l] = $this->getHSL();
-        $l += (100 - $l) * $amount;
-        [$r, $g, $b] = ColorConverter::HSLToRGB($h, $s, $l);
-
-        return new static($r, $g, $b, $this->a);
-    }
-
-    /**
-     * Get the relative luminance value of the color
-     *
-     * @return float The relative luminance value. (0, 1)
+     * @return float The relative luminance value.
      */
     public function luma(): float
     {
-        return ColorConverter::RGBToLuma($this->r, $this->g, $this->b);
+        return $this->toSrgb()->luma();
     }
 
     /**
-     * Create a palette object with a specified number of shades, tints and tone variations.
+     * Get the current color space.
      *
-     * @param int $shades The number of shades to generate.
-     * @param int $tints The number of tints to generate.
-     * @param int $tones The number of tones to generate.
-     * @return array A palette object.
+     * @return string The current color space.
      */
-    public function palette(int $shades = 10, int $tints = 10, int $tones = 10): array
+    public function space(): string
     {
-        return [
-            'shades' => $this->shades($shades),
-            'tints' => $this->tints($tints),
-            'tones' => $this->tones($tones),
-        ];
+        return static::COLOR_SPACE;
     }
 
     /**
-     * Set the alpha value of the color.
+     * Convert the Color to a named color space.
      *
-     * @param float|int $a The alpha value. (0, 1)
-     * @return Color A new Color.
-     */
-    public function setAlpha(float|int $a): static
-    {
-        return new static($this->r, $this->g, $this->b, $a);
-    }
-
-    /**
-     * Set the brightness value of the color.
+     * @param string $space The color space.
+     * @return Color The converted Color.
      *
-     * @param float|int $v The brightness value. (0, 100)
-     * @return Color A new Color.
+     * @throws InvalidArgumentException if the Color class name is not valid.
      */
-    public function setBrightness(float|int $v): static
+    public function to(string $space): Color
     {
-        [$h, $s, $_] = $this->getHSV();
-        [$r, $g, $b] = ColorConverter::HSVToRGB($h, $s, $v);
-
-        return new static($r, $g, $b, $this->a);
-    }
-
-    /**
-     * Set the hue value of the color.
-     *
-     * @param float|int $h The hue value. (0, 360)
-     * @return Color A new Color.
-     */
-    public function setHue(float|int $h): static
-    {
-        [$_, $s, $v] = $this->getHSV();
-        [$r, $g, $b] = ColorConverter::HSVToRGB($h, $s, $v);
-
-        return new static($r, $g, $b, $this->a);
-    }
-
-    /**
-     * Set the saturation value of the color.
-     *
-     * @param float|int $s The saturation value. (0, 100)
-     * @return Color A new Color.
-     */
-    public function setSaturation(float|int $s): static
-    {
-        [$h, $_, $v] = $this->getHSV();
-        [$r, $g, $b] = ColorConverter::HSVToRGB($h, $s, $v);
-
-        return new static($r, $g, $b, $this->a);
-    }
-
-    /**
-     * Shade the color by a specified amount.
-     *
-     * @param float|int $amount The amount to shade the color by. (0, 1)
-     * @return Color A new Color.
-     */
-    public function shade(float|int $amount): static
-    {
-        $color = static::mix($this, new static(0), $amount);
-
-        return new static(
-            $color->r,
-            $color->g,
-            $color->b,
-            $this->a
-        );
-    }
-
-    /**
-     * Create an array with a specified number of shade variations.
-     *
-     * @param int $shades The number of shades to generate.
-     * @return array An array containing shade variations.
-     */
-    public function shades(int $shades = 10): array
-    {
-        return array_map(
-            fn(int $value): Color => $this->shade($value / ($shades + 1)),
-            array_keys(array_fill(0, $shades, 0))
-        );
-    }
-
-    /**
-     * Create an array with 2 split color variations.
-     *
-     * @return array An array containing 2 split color variations.
-     */
-    public function split(): array
-    {
-        [$h, $s, $v] = ColorConverter::RGBToHSV($this->r, $this->g, $this->b);
-        [$r1, $g1, $b1] = ColorConverter::HSVToRGB($h + 150, $s, $v);
-        [$r2, $g2, $b2] = ColorConverter::HSVToRGB($h - 150, $s, $v);
-
-        return [
-            new static($r1, $g1, $b1, $this->a),
-            new static($r2, $g2, $b2, $this->a),
-        ];
-    }
-
-    /**
-     * Create an array with 3 tetradic color variations.
-     *
-     * @return array An array containing 3 tetradic color variations.
-     */
-    public function tetradic(): array
-    {
-        [$h, $s, $v] = ColorConverter::RGBToHSV($this->r, $this->g, $this->b);
-        [$r1, $g1, $b1] = ColorConverter::HSVToRGB($h + 60, $s, $v);
-        [$r2, $g2, $b2] = ColorConverter::HSVToRGB($h + 180, $s, $v);
-        [$r3, $g3, $b3] = ColorConverter::HSVToRGB($h - 120, $s, $v);
-
-        return [
-            new static($r1, $g1, $b1, $this->a),
-            new static($r2, $g2, $b2, $this->a),
-            new static($r3, $g3, $b3, $this->a),
-        ];
-    }
-
-    /**
-     * Tint the color by a specified amount.
-     *
-     * @param float|int $amount The amount to tint the color by. (0, 1)
-     * @return Color A new Color.
-     */
-    public function tint(float|int $amount): static
-    {
-        $color = static::mix($this, new static(100), $amount);
-
-        return new static(
-            $color->r,
-            $color->g,
-            $color->b,
-            $this->a
-        );
-    }
-
-    /**
-     * Create an array with a specified number of tint variations.
-     *
-     * @param int $tints The number of tints to generate.
-     * @return array An array containing tint variations.
-     */
-    public function tints(int $tints = 10): array
-    {
-        return array_map(
-            fn(int $value): Color => $this->tint($value / ($tints + 1)),
-            array_keys(array_fill(0, $tints, 0))
-        );
-    }
-
-    /**
-     * Get a hexadecimal string representation of the color.
-     *
-     * @return $string The hexadecimal string.
-     */
-    public function toHexString(): string
-    {
-        $hex = $this->getHex();
-
-        return static::toHex($hex);
-    }
-
-    /**
-     * Get a HSL/HSLA string representation of the color.
-     *
-     * @return string The HSL/HSLA string.
-     */
-    public function toHSLString(): string
-    {
-        [$h, $s, $l] = ColorConverter::RGBToHSL($this->r, $this->g, $this->b);
-
-        $h = round($h);
-        $s = round($s);
-        $l = round($l);
-        $a = round($this->a * 100);
-
-        if ($a < 100) {
-            return 'hsl('.$h.'deg '.$s.'% '.$l.'% / '.$a.'%)';
+        if (!$space || static::COLOR_SPACE === $space) {
+            return $this;
         }
 
-        return 'hsl('.$h.'deg '.$s.'% '.$l.'%)';
+        if (!array_key_exists($space, static::CONVERSION_MAP)) {
+            throw new InvalidArgumentException('Invalid Color space: '.$space);
+        }
+
+        return $this->{static::CONVERSION_MAP[$space]}();
     }
 
     /**
-     * Tone the color by a specified amount.
+     * Convert the Color to A98Rgb.
      *
-     * @param float|int $amount The amount to tone the color by. (0, 1)
+     * @return A98Rgb The A98Rgb Color.
+     */
+    public function toA98Rgb(): A98Rgb
+    {
+        return $this->toXyzD65()->toA98Rgb();
+    }
+
+    /**
+     * Get the color components as an array.
+     *
+     * @return array The color components.
+     */
+    abstract public function toArray(): array;
+
+    /**
+     * Convert the Color to DisplayP3.
+     *
+     * @return DisplayP3 The DisplayP3 Color.
+     */
+    public function toDisplayP3(): DisplayP3
+    {
+        return $this->toDisplayP3Linear()->toDisplayP3();
+    }
+
+    /**
+     * Convert the Color to DisplayP3Linear.
+     *
+     * @return DisplayP3Linear The DisplayP3Linear Color.
+     */
+    public function toDisplayP3Linear(): DisplayP3Linear
+    {
+        return $this->toXyzD65()->toDisplayP3Linear();
+    }
+
+    /**
+     * Convert the Color to Hex.
+     *
+     * @return Hex The Hex Color.
+     */
+    public function toHex(): Hex
+    {
+        return $this->toRgb()->toHex();
+    }
+
+    /**
+     * Convert the Color to Hsl.
+     *
+     * @return Hsl The Hsl Color.
+     */
+    public function toHsl(): Hsl
+    {
+        return $this->toSrgb()->toHsl();
+    }
+
+    /**
+     * Convert the Color to Hwb.
+     *
+     * @return Hwb The Hwb Color.
+     */
+    public function toHwb(): Hwb
+    {
+        return $this->toSrgb()->toHwb();
+    }
+
+    /**
+     * Convert the Color to Lab.
+     *
+     * @return Lab The Lab Color.
+     */
+    public function toLab(): Lab
+    {
+        return $this->toXyzD50()->toLab();
+    }
+
+    /**
+     * Convert the Color to Lch.
+     *
+     * @return Lch The Lch Color.
+     */
+    public function toLch(): Lch
+    {
+        return $this->toLab()->toLch();
+    }
+
+    /**
+     * Convert the Color to OkLab.
+     *
+     * @return OkLab The OkLab Color.
+     */
+    public function toOkLab(): OkLab
+    {
+        return $this->toXyzD65()->toOkLab();
+    }
+
+    /**
+     * Convert the Color to OkLch.
+     *
+     * @return OkLch The OkLch Color.
+     */
+    public function toOkLch(): OkLch
+    {
+        return $this->toOkLab()->toOkLch();
+    }
+
+    /**
+     * Convert the Color to ProPhotoRgb.
+     *
+     * @return ProPhotoRgb The ProPhotoRgb Color.
+     */
+    public function toProPhotoRgb(): ProPhotoRgb
+    {
+        return $this->toXyzD50()->toProPhotoRgb();
+    }
+
+    /**
+     * Convert the Color to Rec2020.
+     *
+     * @return Rec2020 The Rec2020 Color.
+     */
+    public function toRec2020(): Rec2020
+    {
+        return $this->toXyzD65()->toRec2020();
+    }
+
+    /**
+     * Convert the Color to Rgb.
+     *
+     * @return Rgb The Rgb Color.
+     */
+    public function toRgb(): Rgb
+    {
+        return $this->toSrgb()->toRgb();
+    }
+
+    /**
+     * Convert the Color to Srgb.
+     *
+     * @return Srgb The Srgb Color.
+     */
+    public function toSrgb(): Srgb
+    {
+        return $this->toSrgbLinear()->toSrgb();
+    }
+
+    /**
+     * Convert the Color to SrgbLinear.
+     *
+     * @return SrgbLinear The SrgbLinear Color.
+     */
+    public function toSrgbLinear(): SrgbLinear
+    {
+        return $this->toXyzD65()->toSrgbLinear();
+    }
+
+    /**
+     * Get the CSS color string.
+     *
+     * @param bool|null $alpha Whether to include the alpha value.
+     * @param int $precision The decimal precision.
+     * @return string The CSS color string.
+     */
+    public function toString(bool|null $alpha = null, int $precision = 2): string
+    {
+        $alpha ??= $this->alpha < 1;
+
+        $values = array_values($this->toArray());
+
+        $result = 'color('.
+            static::COLOR_SPACE.
+            ' '.
+            round($values[0], $precision).' '.
+            round($values[1], $precision).' '.
+            round($values[2], $precision);
+
+        if ($alpha) {
+            $result .= ' / '.round($this->alpha, $precision);
+        }
+
+        $result .= ')';
+
+        return $result;
+    }
+
+    /**
+     * Convert the Color to XyzD50.
+     *
+     * @return XyzD50 The XyzD50 Color.
+     */
+    public function toXyzD50(): XyzD50
+    {
+        return $this->toXyzD65()->toXyzD50();
+    }
+
+    /**
+     * Convert the Color to XyzD65.
+     *
+     * @return XyzD65 The XyzD65 Color.
+     */
+    public function toXyzD65(): XyzD65
+    {
+        return $this->toSrgbLinear()->toXyzD65();
+    }
+
+    /**
+     * Clone the Color with a new alpha value.
+     *
+     * @param float $alpha The alpha value.
      * @return Color A new Color.
      */
-    public function tone(float|int $amount): static
+    public function withAlpha(float $alpha): static
     {
-        $color = static::mix($this, new static(50), $amount);
+        $data = $this->toArray();
+        $data['alpha'] = $alpha;
 
-        return new static(
-            $color->r,
-            $color->g,
-            $color->b,
-            $this->a
-        );
-    }
-
-    /**
-     * Create an array with a specified number of tone variations.
-     *
-     * @param int $tones The number of tones to generate.
-     * @return array An array containing tone variations.
-     */
-    public function tones(int $tones = 10): array
-    {
-        return array_map(
-            fn(int $value): Color => $this->tone($value / ($tones + 1)),
-            array_keys(array_fill(0, $tones, 0))
-        );
-    }
-
-    /**
-     * Get a RGB/RGBA string representation of the color.
-     *
-     * @return string The RGB/RGBA string.
-     */
-    public function toRGBString(): string
-    {
-        $r = round($this->r);
-        $g = round($this->g);
-        $b = round($this->b);
-        $a = round($this->a * 100);
-
-        if ($a < 100) {
-            return 'rgb('.$r.' '.$g.' '.$b.' / '.$a.'%)';
-        }
-
-        return 'rgb('.$r.' '.$g.' '.$b.')';
-    }
-
-    /**
-     * Get a HTML string representation of the color.
-     *
-     * @return string The HTML color string.
-     */
-    public function toString(): string
-    {
-        if (!$this->a) {
-            return 'transparent';
-        }
-
-        if ($this->a < 1) {
-            return $this->toRGBString();
-        }
-
-        $hex = $this->getHex();
-
-        $name = array_search($hex, static::COLORS);
-
-        if ($name) {
-            return $name;
-        }
-
-        return static::toHex($hex);
-    }
-
-    /**
-     * Create an array with 2 triadic color variations.
-     *
-     * @return array An array containing 2 triadic color variations.
-     */
-    public function triadic(): array
-    {
-        [$h, $s, $v] = ColorConverter::RGBToHSV($this->r, $this->g, $this->b);
-        [$r1, $g1, $b1] = ColorConverter::HSVToRGB($h + 120, $s, $v);
-        [$r2, $g2, $b2] = ColorConverter::HSVToRGB($h - 120, $s, $v);
-
-        return [
-            new static($r1, $g1, $b1, $this->a),
-            new static($r2, $g2, $b2, $this->a),
-        ];
-    }
-
-    /**
-     * Get the hex string of the Colour.
-     *
-     * @return string The hex string.
-     */
-    protected function getHex(): string
-    {
-        $r = round($this->r);
-        $g = round($this->g);
-        $b = round($this->b);
-
-        if ($this->a < 1) {
-            return sprintf('#%02x%02x%02x%02x', $r, $g, $b, $this->a * 255);
-        }
-
-        return sprintf('#%02x%02x%02x', $r, $g, $b);
-    }
-
-    /**
-     * Get the HSL values of the Colour.
-     *
-     * @return array The HSL values.
-     */
-    protected function getHSL(): array
-    {
-        return ColorConverter::RGBToHSL($this->r, $this->g, $this->b);
-    }
-
-    /**
-     * Get the HSV values of the Colour.
-     *
-     * @return array The HSV values.
-     */
-    protected function getHSV(): array
-    {
-        return ColorConverter::RGBToHSV($this->r, $this->g, $this->b);
+        return new static(...array_values($data));
     }
 
     /**
      * Clamp a value between a min and max.
      *
-     * @param float|int $min The minimum value of the clamped range.
-     * @param float|int $max The maximum value of the clamped range.
+     * @param float|int $value The value to clamp.
+     * @param float|int $min The minimum value.
+     * @param float|int $max The maximum value.
+     * @return float The clamped value.
+     */
+    protected static function clamp(float $value, float $min = 0, float $max = 1): float
+    {
+        return max($min, min($max, $value));
+    }
+
+    /**
+     * Clamp a hue value.
+     *
      * @param float|int $value The value to clamp.
      * @return float The clamped value.
      */
-    protected static function clamp(float|int $val, float|int $min = 0, float|int $max = 100): float
+    protected static function clampHue(float $value): float
     {
-        return (float) max($min, min($max, $val));
+        $value = fmod($value, 360);
+
+        if ($value < 0) {
+            $value += 360;
+        }
+
+        return $value;
     }
 
     /**
-     * Linear interpolation from one value to another.
+     * Parse an angle from a CSS value.
      *
-     * @param float|int $amount The amount to interpolate.
-     * @param float|int $v1 The starting value.
-     * @param float|int $v2 The ending value.
-     * @return float The interpolated value.
+     * @param string $value The CSS value.
+     * @return float The parsed angle.
      */
-    protected static function lerp(float|int $a, float|int $b, float|int $amount): float
+    protected static function parseCssAngle(string $value): float
     {
-        return round($a * (1 - $amount) + $b * $amount, 2);
+        if (str_ends_with($value, '%')) {
+            return (float) (substr($value, 0, -1) / 100 * 360);
+        }
+
+        if (str_ends_with($value, 'rad')) {
+            return rad2deg((float) substr($value, 0, -3));
+        }
+
+        if (str_ends_with($value, 'turn')) {
+            return (float) (substr($value, 0, -4) * 360);
+        }
+
+        return (float) $value;
     }
 
     /**
-     * Shorten a hex string (if possible).
+     * Parse a number from a CSS value.
      *
-     * @param string $hex The hex string.
-     * @return string The hex string.
+     * @param string $value The CSS value.
+     * @param float $percentMultiplier The percent multiplier.
+     * @return float The parsed number.
      */
-    protected static function toHex(string $hex)
+    protected static function parseCssNumber(string $value, float $percentMultiplier = 1): float
     {
-        $length = strlen($hex);
-
-        if (
-            $length === 9 &&
-            $hex[1] === $hex[2] &&
-            $hex[3] === $hex[4] &&
-            $hex[5] === $hex[6] &&
-            $hex[7] === $hex[8]
-        ) {
-            return '#'.$hex[1].$hex[3].$hex[5].$hex[7];
+        if (str_ends_with($value, '%')) {
+            return (float) (substr($value, 0, -1) / 100 * $percentMultiplier);
         }
 
-        if (
-            $length === 7 &&
-            $hex[1] === $hex[2] &&
-            $hex[3] === $hex[4] &&
-            $hex[5] === $hex[6]
-        ) {
-            return '#'.$hex[1].$hex[3].$hex[5];
-        }
-
-        return $hex;
+        return (float) $value;
     }
 }
