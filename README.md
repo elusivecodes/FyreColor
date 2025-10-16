@@ -237,7 +237,7 @@ $color = Color::createFromXyzD65($x, $y, $z, $alpha);
 
 **Contrast**
 
-Calculate the contrast between this and another Color.
+Calculate the contrast between this and another *Color*.
 
 - `$other` is a *Color*.
 
