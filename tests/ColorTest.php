@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
 
 use function array_diff;
 use function class_uses;
+use function serialize;
+use function unserialize;
 
 final class ColorTest extends TestCase
 {
@@ -568,6 +570,16 @@ final class ColorTest extends TestCase
     {
         $this->assertEmpty(
             array_diff([MacroTrait::class, StaticMacroTrait::class], class_uses(Color::class))
+        );
+    }
+
+    public function testSerializable(): void
+    {
+        $color = Color::createFromString('lavender');
+
+        $this->assertSame(
+            $color->toString(),
+            unserialize(serialize($color))->toString()
         );
     }
 
