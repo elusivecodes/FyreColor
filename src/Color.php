@@ -23,6 +23,7 @@ use Fyre\Color\Colors\XyzD65;
 use Fyre\Utility\Traits\MacroTrait;
 use Fyre\Utility\Traits\StaticMacroTrait;
 use InvalidArgumentException;
+use Stringable;
 
 use function array_key_exists;
 use function array_map;
@@ -52,7 +53,7 @@ use const PHP_INT_MAX;
 /**
  * Color
  */
-abstract class Color
+abstract class Color implements Stringable
 {
     use MacroTrait;
     use StaticMacroTrait;
